@@ -16,7 +16,8 @@ Also it may be slow to slow to load during process as hosted on a less memory fr
 
 
 Important Note: This project was made to showcase the skill of making AI Agent to use for Dynamic Underwriting and Risk Assesment . So it is provided with input and AI Agent does analysis for underwriting and risk assesment .
-It does not provide user and insurer side control ,basically it is to depict capability to use and develop it for further use  
+It does not provide user and insurer side control ,basically it is to depict capability to use and develop it for further use.
+Also Report examples which will be given after performing analysis and the summary report are attached for reference.
 
 ## 🚀 Features
 
