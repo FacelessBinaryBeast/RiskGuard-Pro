@@ -12,6 +12,7 @@ Note: Due to use of free tier for hosting it may take a minute or two for the fi
 Also as it is free tier it can be stopped deployed so please reach out by submitting a pull request.
 Or you can aslo try by running it locally by downloading it.
 Also it may not runsometimes as API Keys free tier limit restriction may kick in or if key is deleted or removed.
+Also it may be slow to slow to load during process as hosted on a less memory free service tier.
 
 
 Important Note: This project was made to showcase the skill of making AI Agent to use for Dynamic Underwriting and Risk Assesment . So it is provided with input and AI Agent does analysis for underwriting and risk assesment .
