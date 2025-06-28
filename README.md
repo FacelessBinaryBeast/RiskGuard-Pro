@@ -1,6 +1,20 @@
 # 🤖 AI-Powered Underwriting Risk Assessment System
 
-A comprehensive insurance underwriting and risk assessment platform that integrates with **Gemini Flash 2.0** for advanced AI-powered analysis and recommendations.
+A comprehensive insurance underwriting and risk assessment platform that integrates with **Gemini 2.0 Flash** for advanced AI-powered analysis and recommendations.
+#BFSI Sector #banking #finance #insurance #fintech #solutions 
+
+## Hosted At
+
+https://riskguard-pro.onrender.com/
+
+
+Note: Due to use of free tier for hosting it may take a minute or two for the first loading or loading after long time.
+Also as it is free tier it can be stopped deployed so please reach out by submitting a pull request.
+Or you can aslo try by running it locally by downloading it.
+
+
+Important Note: This project was made to showcase the skill of making AI Agent to use for Dynamic Underwriting and Risk Assesment . So it is provided with input and AI Agent does analysis for underwriting and risk assesment .
+It does not provide user and insurer side control ,basically it is to depict capability to use and develop it for further use  
 
 ## 🚀 Features
 
@@ -21,7 +35,7 @@ A comprehensive insurance underwriting and risk assessment platform that integra
 - **Personalized Recommendations**: Actionable improvement suggestions
 
 ### 🤖 AI Integration
-- **Gemini Flash 2.0**: Advanced AI analysis
+- **Gemini 2.0 Flash**: Advanced AI analysis
 - **Comprehensive Reports**: Detailed JSON analysis
 - **Underwriting Decisions**: Accept/Decline/Refer recommendations
 - **Coverage Suggestions**: Personalized insurance recommendations
@@ -85,7 +99,7 @@ Access the application at: `http://localhost:5000`
 
 ### Running AI Analysis
 ```bash
-python main.py
+python main_updated.py --data-file path/to/your/data.json
 ```
 
 ### API Endpoints
@@ -100,6 +114,7 @@ python main.py
 - `/medical` - Medical information form
 - `/preferences` - Preferences form
 - `/summary` - Summary and risk assessment
+- `/ai_analysis` - AI analysis results page
 
 #### API Endpoints
 - `POST /api/save_basics` - Save basic information
@@ -110,43 +125,56 @@ python main.py
 - `POST /api/save_medical` - Save medical information
 - `POST /api/save_preferences` - Save preferences
 - `GET /api/get_all_data` - Get all saved data
+- `GET /api/get_ai_analysis` - Get AI analysis results
 - `POST /api/generate_pdf` - Generate PDF report
+- `POST /api/download_ai_analysis_pdf` - Download AI analysis PDF
 - `POST /api/clear_session` - Clear session data
 
 ## 📊 Risk Assessment System
 
 ### Scoring Categories (100-Point Scale)
 
-1. **Age Factor (20 points)**
-   - < 25 years: 5 points
-   - 25-29 years: 8 points
-   - 30-34 years: 12 points
-   - 35-39 years: 16 points
-   - 40-44 years: 20 points
-   - 45-49 years: 25 points
-   - 50-54 years: 30 points
-   - 55-59 years: 35 points
-   - 60+ years: 40 points
+1. **Personal Information (5 points)**
+   - Age factor: 0-3 points
+   - Marital status: 0-1 points
+   - Location tier: 0-1 points
 
-2. **Lifestyle Factors (25 points)**
-   - Smoking: 10 points
-   - Alcohol: 0-5 points
-   - Physical Activity: 0-5 points
-   - BMI: 0-5 points
+2. **Lifestyle & Behavior (8 points)**
+   - Occupation risk: 0-2 points
+   - Working type: 0-2 points
+   - Daily steps: 0-2 points
+   - Sleep hours: 0-2 points
+   - BMI: 0-2 points
+   - Smoking: 0-3 points
+   - Alcohol consumption: 0-2 points
+   - Commute type: 0-1 points
 
-3. **Medical Factors (25 points)**
-   - Pre-existing conditions: 15 points
-   - Family history: 5 points
-   - Recent hospitalizations: 5 points
+3. **Financial Information (8 points)**
+   - Employment status: 0-2 points
+   - CTC (Cost to Company): 0-2 points
+   - Disposable income: 0-2 points
+   - EMI load: 0-2 points
 
-4. **Occupation Factors (15 points)**
-   - High-risk occupations: 10 points
-   - High-risk work types: 5 points
+4. **Medical Information (8 points)**
+   - Pre-existing conditions: 0-2 points
+   - BMI (from lifestyle): 0-2 points
+   - Family medical history: 0-2 points
+   - Recent hospitalizations: 0-2 points
 
-5. **Financial Stability (15 points)**
-   - Employment status: 0-10 points
-   - Income stability: 0-5 points
-   - Disposable income: 0-5 points
+5. **Preferences & Risk Appetite (4 points)**
+   - Risk tolerance: 0-2 points
+   - Budget constraints: 0-2 points
+
+6. **Dependents Information (6 points)**
+   - Number of dependents: 0-3 points
+   - Dependent ages: 0-3 points
+
+7. **Insurance History (4 points)**
+   - Existing policies: 0-2 points
+   - Claims history: 0-2 points
+
+8. **Coverage Summary (3 points)**
+   - Coverage adequacy: 0-3 points
 
 ### Risk Levels
 - **Very Low (0-20)**: A+ Rating, ₹15L coverage, ₹250 premium
@@ -157,46 +185,35 @@ python main.py
 
 ## 🤖 AI Integration
 
-### Gemini Flash 2.0 Analysis
-The system uses Gemini Flash 2.0 for advanced analysis:
+### Gemini 2.0 Flash Analysis
+The system uses Gemini 2.0 Flash for advanced analysis:
 
 ```python
-from main import UnderwritingAIAnalyzer
+from main_updated import analyze_with_gemini
 
-# Initialize analyzer
-analyzer = UnderwritingAIAnalyzer(api_key="your_gemini_api_key")
-
-# Collect data
-structured_data = analyzer.collect_all_data(session_data)
-
-# Get AI analysis
-ai_analysis = analyzer.analyze_with_gemini(structured_data)
-
-# Generate comprehensive report
-report = analyzer.generate_comprehensive_report(structured_data, ai_analysis)
-
-# Save report
-filepath = analyzer.save_report(report)
+# Analyze data with AI
+ai_analysis = analyze_with_gemini(client_data)
 ```
 
 ### AI Analysis Output
 The AI provides:
-- **Risk Assessment**: Overall risk level, score, rating
-- **Coverage Recommendations**: Life, health, and additional coverage
-- **Underwriting Decision**: Accept/Decline/Refer with conditions
-- **AI Insights**: Risk trends, market comparison
-- **Detailed Recommendations**: Actionable improvement strategies
+- **Detailed Analysis**: Age, occupation, lifestyle, medical, and financial factors
+- **Risk Factors**: Specific risk factors and their impact
+- **Positive Indicators**: Beneficial factors from the client's profile
+- **Areas of Concern**: Specific concerns and additional requirements
+- **Recommendations**: Policy recommendations, coverage amounts, medical requirements
+- **Conclusion**: Personalized risk profile and next steps
 
 ## 📁 Project Structure
 
 ```
 UnderwriterRisk-Calc/
 ├── app.py                 # Flask web application
-├── main.py               # AI analysis and data processing
-├── underwriting_agent.py # FastAPI alternative backend
-├── requirements.txt      # Python dependencies
-├── README.md            # This file
-├── templates/           # HTML templates
+├── main_updated.py        # AI analysis module
+├── scoring_functions.py   # Risk scoring calculations
+├── requirements.txt       # Python dependencies
+├── README.md             # This file
+├── templates/            # HTML templates
 │   ├── landing.html
 │   ├── basics.html
 │   ├── additional.html
@@ -205,11 +222,16 @@ UnderwriterRisk-Calc/
 │   ├── coverage.html
 │   ├── medical.html
 │   ├── preferences.html
-│   └── summary.html
-├── static/              # CSS and static files
-│   └── styles.css
-├── reports/             # Generated reports (created automatically)
-└── venv/               # Virtual environment
+│   ├── summary.html
+│   ├── ai_analysis.html
+│   └── index.html
+├── static/               # CSS and static files
+│   ├── base.css
+│   ├── landing.css
+│   ├── styles.css
+│   └── forms.css
+├── reports/              # Generated reports (created automatically)
+└── venv/                # Virtual environment
 ```
 
 ## 🔧 Configuration
@@ -223,17 +245,17 @@ FLASK_DEBUG=True
 ```
 
 ### Customization
-- Modify risk scoring weights in `app.py` and `templates/summary.html`
-- Adjust AI prompts in `main.py`
+- Modify risk scoring weights in `scoring_functions.py`
+- Adjust AI prompts in `main_updated.py`
 - Customize PDF templates in `app.py`
 - Update form fields in HTML templates
 
 ## 📈 Data Flow
 
 1. **Data Collection**: Multi-step form system collects comprehensive information
-2. **Data Storage**: Information saved to localStorage and server session
-3. **Risk Calculation**: 100-point scoring system applied
-4. **AI Analysis**: Data sent to Gemini Flash 2.0 for advanced analysis
+2. **Data Storage**: Information saved to server session
+3. **Risk Calculation**: 100-point scoring system applied using `scoring_functions.py`
+4. **AI Analysis**: Data sent to Gemini 2.0 Flash for advanced analysis via `main_updated.py`
 5. **Report Generation**: Comprehensive reports generated in PDF and JSON
 6. **Recommendations**: Personalized suggestions for improvement
 
@@ -289,4 +311,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ---
 
-**Built with ❤️ using Flask, Gemini Flash 2.0, and modern web technologies** 
+**Built with ❤️ using Flask, Gemini 2.0 Flash, and modern web technologies** 
