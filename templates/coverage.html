@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance & Coverage History - Underwriting Risk Assessment</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Insurance & Coverage History</h1>
+            <p>Tell us about your existing insurance policies and claims</p>
+        </div>
+
+        <div class="form-container">
+            <div class="success-message" id="success-message">
+                ✅ Insurance coverage saved! Redirecting to medical information...
+            </div>
+
+            <form id="coverage-form">
+                <!-- Existing Life Insurance Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Existing Life Insurance</h2>
+                    
+                    <div class="form-group">
+                        <label class="required">Do you have existing life insurance?</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="life-yes" name="hasLifeInsurance" value="yes" required onchange="toggleLifeInsurance()">
+                                <label for="life-yes">Yes</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="life-no" name="hasLifeInsurance" value="no" onchange="toggleLifeInsurance()">
+                                <label for="life-no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="lifeInsuranceDetails" style="display: none;">
+                        <div class="insurance-card">
+                            <div class="insurance-header">
+                                <span class="insurance-title">Life Insurance Policy</span>
+                                <button type="button" class="add-insurance-btn" onclick="addLifeInsurance()">+ Add Another</button>
+                            </div>
+                            <div id="lifeInsuranceList"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Existing Health Insurance Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Existing Health Insurance</h2>
+                    
+                    <div class="form-group">
+                        <label class="required">Do you have existing health insurance?</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="health-yes" name="hasHealthInsurance" value="yes" required onchange="toggleHealthInsurance()">
+                                <label for="health-yes">Yes</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="health-no" name="hasHealthInsurance" value="no" onchange="toggleHealthInsurance()">
+                                <label for="health-no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="healthInsuranceDetails" style="display: none;">
+                        <div class="insurance-card">
+                            <div class="insurance-header">
+                                <span class="insurance-title">Health Insurance Policy</span>
+                                <button type="button" class="add-insurance-btn" onclick="addHealthInsurance()">+ Add Another</button>
+                            </div>
+                            <div id="healthInsuranceList"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Claim History Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Claim History</h2>
+                    
+                    <div class="form-group">
+                        <label class="required">Have you made any insurance claims in the last 5 years?</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="claims-yes" name="hasClaims" value="yes" required onchange="toggleClaims()">
+                                <label for="claims-yes">Yes</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="claims-no" name="hasClaims" value="no" onchange="toggleClaims()">
+                                <label for="claims-no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="claimsDetails" style="display: none;">
+                        <div class="claim-history-section">
+                            <h3 style="margin-bottom: 15px; color: #1a365d;">Claim Details</h3>
+                            <div id="claimsList"></div>
+                            <button type="button" class="add-insurance-btn" onclick="addClaim()">+ Add Another Claim</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Policy Lapse History Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Policy Lapse History</h2>
+                    
+                    <div class="form-group">
+                        <label class="required">Have any of your insurance policies lapsed before?</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="lapse-yes" name="hasLapsedPolicies" value="yes" required onchange="toggleLapseDetails()">
+                                <label for="lapse-yes">Yes</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="lapse-no" name="hasLapsedPolicies" value="no" onchange="toggleLapseDetails()">
+                                <label for="lapse-no">No</label>
+                            </div>
+                        </div>
+                        <div class="field-hint">A lapsed policy is one that was cancelled due to non-payment of premiums</div>
+                    </div>
+
+                    <div id="lapseDetails" style="display: none;">
+                        <div class="form-group">
+                            <label for="lapseReason">Reason for Policy Lapse</label>
+                            <textarea id="lapseReason" name="lapseReason" placeholder="Please explain why the policy lapsed..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coverage Summary -->
+                <div class="coverage-summary" id="coverageSummary">
+                    <h3 style="margin-bottom: 15px; color: #1a365d;">Coverage Summary</h3>
+                    <div class="summary-item">
+                        <span class="summary-label">Total Life Insurance Coverage:</span>
+                        <span class="summary-value" id="totalLifeCoverage">Rs.0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Total Health Insurance Coverage:</span>
+                        <span class="summary-value" id="totalHealthCoverage">Rs.0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Number of Claims (Last 5 years):</span>
+                        <span class="summary-value" id="totalClaims">0</span>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" onclick="goBack()">Back</button>
+                    <button type="submit" class="btn btn-primary">Submit & Continue</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let lifeInsuranceCount = 0;
+        let healthInsuranceCount = 0;
+        let claimsCount = 0;
+
+        // Navigation
+        function goBack() {
+            window.location.href = '/finances';
+        }
+
+        // Toggle life insurance details
+        function toggleLifeInsurance() {
+            const hasLifeInsurance = document.querySelector('input[name="hasLifeInsurance"]:checked').value;
+            const lifeInsuranceDetails = document.getElementById('lifeInsuranceDetails');
+            
+            if (hasLifeInsurance === 'yes') {
+                lifeInsuranceDetails.style.display = 'block';
+                if (lifeInsuranceCount === 0) {
+                    addLifeInsurance();
+                }
+            } else {
+                lifeInsuranceDetails.style.display = 'none';
+            }
+        }
+
+        // Toggle health insurance details
+        function toggleHealthInsurance() {
+            const hasHealthInsurance = document.querySelector('input[name="hasHealthInsurance"]:checked').value;
+            const healthInsuranceDetails = document.getElementById('healthInsuranceDetails');
+            
+            if (hasHealthInsurance === 'yes') {
+                healthInsuranceDetails.style.display = 'block';
+                if (healthInsuranceCount === 0) {
+                    addHealthInsurance();
+                }
+            } else {
+                healthInsuranceDetails.style.display = 'none';
+            }
+        }
+
+        // Toggle claims details
+        function toggleClaims() {
+            const hasClaims = document.querySelector('input[name="hasClaims"]:checked').value;
+            const claimsDetails = document.getElementById('claimsDetails');
+            
+            if (hasClaims === 'yes') {
+                claimsDetails.style.display = 'block';
+                if (claimsCount === 0) {
+                    addClaim();
+                }
+            } else {
+                claimsDetails.style.display = 'none';
+            }
+        }
+
+        // Toggle lapse details
+        function toggleLapseDetails() {
+            const hasLapsedPolicies = document.querySelector('input[name="hasLapsedPolicies"]:checked').value;
+            const lapseDetails = document.getElementById('lapseDetails');
+            
+            if (hasLapsedPolicies === 'yes') {
+                lapseDetails.style.display = 'block';
+            } else {
+                lapseDetails.style.display = 'none';
+            }
+        }
+
+        // Add life insurance policy
+        function addLifeInsurance() {
+            const lifeInsuranceList = document.getElementById('lifeInsuranceList');
+            const insuranceDiv = document.createElement('div');
+            insuranceDiv.className = 'claim-item';
+            insuranceDiv.innerHTML = `
+                <div class="claim-header">
+                    <span class="claim-title">Life Insurance Policy ${lifeInsuranceCount + 1}</span>
+                    <button type="button" class="remove-insurance" onclick="removeInsurance(this)">Remove</button>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Insurance Company</label>
+                        <input type="text" name="life_company_${lifeInsuranceCount}" placeholder="e.g. LIC, HDFC Life">
+                    </div>
+                    <div class="form-group">
+                        <label>Policy Type</label>
+                        <select name="life_type_${lifeInsuranceCount}">
+                            <option value="">Select type</option>
+                            <option value="term">Term Plan</option>
+                            <option value="endowment">Endowment</option>
+                            <option value="ulip">ULIP</option>
+                            <option value="whole">Whole Life</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Sum Assured</label>
+                        <div class="currency-input">
+                            <input type="number" name="life_sum_${lifeInsuranceCount}" min="0" placeholder="e.g. 1000000" onchange="updateCoverageSummary()">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Premium Amount (Annual)</label>
+                        <div class="currency-input">
+                            <input type="number" name="life_premium_${lifeInsuranceCount}" min="0" placeholder="e.g. 15000">
+                        </div>
+                    </div>
+                </div>
+            `;
+            lifeInsuranceList.appendChild(insuranceDiv);
+            lifeInsuranceCount++;
+        }
+
+        // Add health insurance policy
+        function addHealthInsurance() {
+            const healthInsuranceList = document.getElementById('healthInsuranceList');
+            const insuranceDiv = document.createElement('div');
+            insuranceDiv.className = 'claim-item';
+            insuranceDiv.innerHTML = `
+                <div class="claim-header">
+                    <span class="claim-title">Health Insurance Policy ${healthInsuranceCount + 1}</span>
+                    <button type="button" class="remove-insurance" onclick="removeInsurance(this)">Remove</button>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Insurance Company</label>
+                        <input type="text" name="health_company_${healthInsuranceCount}" placeholder="e.g. Star Health, Max Bupa">
+                    </div>
+                    <div class="form-group">
+                        <label>Policy Type</label>
+                        <select name="health_type_${healthInsuranceCount}">
+                            <option value="">Select type</option>
+                            <option value="individual">Individual</option>
+                            <option value="family_floater">Family Floater</option>
+                            <option value="senior_citizen">Senior Citizen</option>
+                            <option value="critical_illness">Critical Illness</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Sum Assured</label>
+                        <div class="currency-input">
+                            <input type="number" name="health_sum_${healthInsuranceCount}" min="0" placeholder="e.g. 500000" onchange="updateCoverageSummary()">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Premium Amount (Annual)</label>
+                        <div class="currency-input">
+                            <input type="number" name="health_premium_${healthInsuranceCount}" min="0" placeholder="e.g. 8000">
+                        </div>
+                    </div>
+                </div>
+            `;
+            healthInsuranceList.appendChild(insuranceDiv);
+            healthInsuranceCount++;
+        }
+
+        // Add claim
+        function addClaim() {
+            const claimsList = document.getElementById('claimsList');
+            const claimDiv = document.createElement('div');
+            claimDiv.className = 'claim-item';
+            claimDiv.innerHTML = `
+                <div class="claim-header">
+                    <span class="claim-title">Claim ${claimsCount + 1}</span>
+                    <button type="button" class="remove-insurance" onclick="removeClaim(this)">Remove</button>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Claim Type</label>
+                        <select name="claim_type_${claimsCount}">
+                            <option value="">Select type</option>
+                            <option value="health">Health Insurance</option>
+                            <option value="life">Life Insurance</option>
+                            <option value="motor">Motor Insurance</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Claim Amount</label>
+                        <div class="currency-input">
+                            <input type="number" name="claim_amount_${claimsCount}" min="0" placeholder="e.g. 50000" onchange="updateCoverageSummary()">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Claim Year</label>
+                        <select name="claim_year_${claimsCount}">
+                            <option value="">Select year</option>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                            <option value="2022">2022</option>
+                            <option value="2021">2021</option>
+                            <option value="2020">2020</option>
+                            <option value="2019">2019</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Reason for Claim</label>
+                        <input type="text" name="claim_reason_${claimsCount}" placeholder="e.g. Hospitalization, Surgery">
+                    </div>
+                </div>
+            `;
+            claimsList.appendChild(claimDiv);
+            claimsCount++;
+        }
+
+        // Remove insurance
+        function removeInsurance(button) {
+            button.closest('.claim-item').remove();
+            updateCoverageSummary();
+        }
+
+        // Remove claim
+        function removeClaim(button) {
+            button.closest('.claim-item').remove();
+            updateCoverageSummary();
+        }
+
+        // Update coverage summary
+        function updateCoverageSummary() {
+            let totalLifeCoverage = 0;
+            let totalHealthCoverage = 0;
+            let totalClaims = claimsCount;
+
+            // Calculate life insurance coverage
+            for (let i = 0; i < lifeInsuranceCount; i++) {
+                const sumInput = document.querySelector(`input[name="life_sum_${i}"]`);
+                if (sumInput && sumInput.value) {
+                    totalLifeCoverage += parseFloat(sumInput.value);
+                }
+            }
+
+            // Calculate health insurance coverage
+            for (let i = 0; i < healthInsuranceCount; i++) {
+                const sumInput = document.querySelector(`input[name="health_sum_${i}"]`);
+                if (sumInput && sumInput.value) {
+                    totalHealthCoverage += parseFloat(sumInput.value);
+                }
+            }
+
+            document.getElementById('totalLifeCoverage').textContent = `Rs.${totalLifeCoverage.toLocaleString()}`;
+            document.getElementById('totalHealthCoverage').textContent = `Rs.${totalHealthCoverage.toLocaleString()}`;
+            document.getElementById('totalClaims').textContent = totalClaims;
+        }
+
+        // Load saved data
+        function loadSavedData() {
+            const savedData = localStorage.getItem('coverageInfo');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                
+                // Populate form fields
+                Object.keys(data).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        if (element.type === 'radio') {
+                            const radioElement = document.querySelector(`input[name="${key}"][value="${data[key]}"]`);
+                            if (radioElement) {
+                                radioElement.checked = true;
+                            }
+                        } else {
+                            element.value = data[key];
+                        }
+                    }
+                });
+                
+                // Handle dynamic insurance policies and claims
+                // This would need more complex logic to restore dynamic content
+                updateCoverageSummary();
+            }
+        }
+
+        // Form submission
+        const form = document.getElementById('coverage-form');
+        const successMessage = document.getElementById('success-message');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Collect form data
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+            
+            // Add calculated summary data
+            const totalLifeCoverage = document.getElementById('totalLifeCoverage').textContent;
+            const totalHealthCoverage = document.getElementById('totalHealthCoverage').textContent;
+            const totalClaims = document.getElementById('totalClaims').textContent;
+            
+            data.totalLifeCoverage = totalLifeCoverage;
+            data.totalHealthCoverage = totalHealthCoverage;
+            data.totalClaims = totalClaims;
+            
+            // Store in localStorage
+            localStorage.setItem('coverageInfo', JSON.stringify(data));
+            
+            // Save to server
+            fetch('/api/save_coverage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    // Show success and redirect
+                    successMessage.style.display = 'block';
+                    setTimeout(() => {
+                        window.location.href = '/medical';
+                    }, 2000);
+                } else {
+                    alert('Error saving data: ' + result.error);
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('Error saving data. Please try again.');
+            });
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSavedData();
+        });
+    </script>
+</body>
+</html> 

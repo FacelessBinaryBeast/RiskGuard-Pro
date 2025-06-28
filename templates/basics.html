@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Personal Information - Underwriting Risk Assessment</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Basic Personal Information</h1>
+            <p>Please provide your personal details for risk assessment</p>
+        </div>
+
+        <div class="form-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress"></div>
+            </div>
+
+            <div class="success-message" id="success-message">
+                ✅ Basic information saved! Redirecting to lifestyle details...
+            </div>
+
+            <form id="basics-form">
+                <!-- Personal Information Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Personal Information</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="fullName" class="required">Full Name</label>
+                            <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required>
+                            <div class="error-message" id="fullName-error">Please enter your full name</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="dob" class="required">Date of Birth</label>
+                            <input type="date" id="dob" name="dob" required>
+                            <div class="error-message" id="dob-error">Please select your date of birth</div>
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="required">Gender</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" id="male" name="gender" value="male" required>
+                                    <label for="male">Male</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="female" name="gender" value="female">
+                                    <label for="female">Female</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="other" name="gender" value="other">
+                                    <label for="other">Other</label>
+                                </div>
+                            </div>
+                            <div class="error-message" id="gender-error">Please select your gender</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="required">Marital Status</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" id="single" name="maritalStatus" value="single" required>
+                                    <label for="single">Single</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="married" name="maritalStatus" value="married">
+                                    <label for="married">Married</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="divorced" name="maritalStatus" value="divorced">
+                                    <label for="divorced">Divorced</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="widowed" name="maritalStatus" value="widowed">
+                                    <label for="widowed">Widowed</label>
+                                </div>
+                            </div>
+                            <div class="error-message" id="maritalStatus-error">Please select your marital status</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Information Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Contact Information</h2>
+                    <div class="contact-grid">
+                        <div class="form-group">
+                            <label for="email" class="required">Email Address</label>
+                            <input type="email" id="email" name="email" placeholder="your.email@example.com" required>
+                            <div class="error-message" id="email-error">Please enter a valid email address</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone" class="required">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" placeholder="+91 98765 43210" required>
+                            <div class="error-message" id="phone-error">Please enter a valid phone number</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Location Information Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Location Information</h2>
+                    <div class="location-grid">
+                        <div class="form-group">
+                            <label for="city" class="required">City</label>
+                            <input type="text" id="city" name="city" placeholder="Enter your city" required>
+                            <div class="error-message" id="city-error">Please enter your city</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="state" class="required">State</label>
+                            <select id="state" name="state" required>
+                                <option value="">Select State</option>
+                                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                <option value="Assam">Assam</option>
+                                <option value="Bihar">Bihar</option>
+                                <option value="Chhattisgarh">Chhattisgarh</option>
+                                <option value="Goa">Goa</option>
+                                <option value="Gujarat">Gujarat</option>
+                                <option value="Haryana">Haryana</option>
+                                <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                <option value="Jharkhand">Jharkhand</option>
+                                <option value="Karnataka">Karnataka</option>
+                                <option value="Kerala">Kerala</option>
+                                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                <option value="Maharashtra">Maharashtra</option>
+                                <option value="Manipur">Manipur</option>
+                                <option value="Meghalaya">Meghalaya</option>
+                                <option value="Mizoram">Mizoram</option>
+                                <option value="Nagaland">Nagaland</option>
+                                <option value="Odisha">Odisha</option>
+                                <option value="Punjab">Punjab</option>
+                                <option value="Rajasthan">Rajasthan</option>
+                                <option value="Sikkim">Sikkim</option>
+                                <option value="Tamil Nadu">Tamil Nadu</option>
+                                <option value="Telangana">Telangana</option>
+                                <option value="Tripura">Tripura</option>
+                                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                <option value="Uttarakhand">Uttarakhand</option>
+                                <option value="West Bengal">West Bengal</option>
+                                <option value="Delhi">Delhi</option>
+                                <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                                <option value="Ladakh">Ladakh</option>
+                                <option value="Chandigarh">Chandigarh</option>
+                                <option value="Dadra and Nagar Haveli">Dadra and Nagar Haveli</option>
+                                <option value="Daman and Diu">Daman and Diu</option>
+                                <option value="Lakshadweep">Lakshadweep</option>
+                                <option value="Puducherry">Puducherry</option>
+                                <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                            </select>
+                            <div class="error-message" id="state-error">Please select your state</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pincode" class="required">Pincode</label>
+                            <input type="text" id="pincode" name="pincode" placeholder="123456" maxlength="6" required>
+                            <div class="error-message" id="pincode-error">Please enter a valid 6-digit pincode</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nationality Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Nationality</h2>
+                    <div class="form-group">
+                        <label class="required">Nationality</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="indian" name="nationality" value="indian" required>
+                                <label for="indian">Indian</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="nri" name="nationality" value="nri">
+                                <label for="nri">NRI (Non-Resident Indian)</label>
+                            </div>
+                        </div>
+                        <div class="error-message" id="nationality-error">Please select your nationality</div>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" onclick="clearForm()">Clear Form</button>
+                    <button type="submit" class="btn btn-primary">Submit & Continue</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Form validation and submission
+        const form = document.getElementById('basics-form');
+        const progressBar = document.getElementById('progress');
+        const successMessage = document.getElementById('success-message');
+
+        // Update progress bar
+        function updateProgress() {
+            const formData = new FormData(form);
+            const filledFields = Array.from(formData.entries()).filter(([key, value]) => value && value.trim() !== '').length;
+            const totalFields = 12; // Total required fields
+            const progress = (filledFields / totalFields) * 100;
+            progressBar.style.width = progress + '%';
+        }
+
+        // Real-time validation
+        form.addEventListener('input', function(e) {
+            updateProgress();
+            validateField(e.target);
+        });
+
+        form.addEventListener('change', function(e) {
+            updateProgress();
+            validateField(e.target);
+        });
+
+        function validateField(field) {
+            const errorElement = document.getElementById(field.name + '-error');
+            let isValid = true;
+
+            // Clear previous error
+            if (errorElement) {
+                errorElement.style.display = 'none';
+            }
+
+            // Validation rules
+            switch(field.name) {
+                case 'fullName':
+                    if (field.value.trim().length < 2) {
+                        showError(errorElement, 'Name must be at least 2 characters long');
+                        isValid = false;
+                    }
+                    break;
+                case 'email':
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(field.value)) {
+                        showError(errorElement, 'Please enter a valid email address');
+                        isValid = false;
+                    }
+                    break;
+                case 'phone':
+                    const phoneRegex = /^[\+]?[0-9\s\-\(\)]{10,}$/;
+                    if (!phoneRegex.test(field.value)) {
+                        showError(errorElement, 'Please enter a valid phone number');
+                        isValid = false;
+                    }
+                    break;
+                case 'pincode':
+                    const pincodeRegex = /^[0-9]{6}$/;
+                    if (!pincodeRegex.test(field.value)) {
+                        showError(errorElement, 'Please enter a valid 6-digit pincode');
+                        isValid = false;
+                    }
+                    break;
+                case 'dob':
+                    const dob = new Date(field.value);
+                    const today = new Date();
+                    const age = today.getFullYear() - dob.getFullYear();
+                    if (age < 18 || age > 100) {
+                        showError(errorElement, 'Age must be between 18 and 100 years');
+                        isValid = false;
+                    }
+                    break;
+            }
+
+            return isValid;
+        }
+
+        function showError(element, message) {
+            if (element) {
+                element.textContent = message;
+                element.style.display = 'block';
+            }
+        }
+
+        // Load saved data
+        function loadSavedData() {
+            const savedData = localStorage.getItem('basicInfo');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                
+                // Populate form fields
+                Object.keys(data).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        if (element.type === 'radio') {
+                            const radioElement = document.querySelector(`input[name="${key}"][value="${data[key]}"]`);
+                            if (radioElement) {
+                                radioElement.checked = true;
+                            }
+                        } else {
+                            element.value = data[key];
+                        }
+                    }
+                });
+                
+                updateProgress();
+            }
+        }
+
+        // Form submission
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate all fields
+            const fields = form.querySelectorAll('input[required], select[required]');
+            let allValid = true;
+
+            fields.forEach(field => {
+                if (!validateField(field)) {
+                    allValid = false;
+                }
+            });
+
+            if (allValid) {
+                // Show success message
+                successMessage.style.display = 'block';
+                
+                // Collect form data
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData);
+                
+                // Calculate age from DOB
+                const dob = new Date(data.dob);
+                const today = new Date();
+                const age = today.getFullYear() - dob.getFullYear();
+                data.age = age;
+                
+                // Store data in localStorage for next step
+                localStorage.setItem('basicInfo', JSON.stringify(data));
+                
+                // Also save to server via API
+                fetch('/api/save_basics', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                }).then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        // Redirect to additional details after 2 seconds
+                        setTimeout(() => {
+                            window.location.href = '/additional';
+                        }, 2000);
+                    } else {
+                        alert('Error saving data: ' + result.error);
+                    }
+                }).catch(error => {
+                    console.error('Error:', error);
+                    alert('Error saving data. Please try again.');
+                });
+            }
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSavedData();
+        });
+
+        // Clear form function
+        function clearForm() {
+            form.reset();
+            updateProgress();
+            
+            // Hide all error messages
+            const errorMessages = document.querySelectorAll('.error-message');
+            errorMessages.forEach(error => {
+                error.style.display = 'none';
+            });
+        }
+
+        // Initialize progress bar
+        updateProgress();
+
+        // Set max date for DOB (18 years ago)
+        const dobInput = document.getElementById('dob');
+        const today = new Date();
+        const maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+        dobInput.max = maxDate.toISOString().split('T')[0];
+    </script>
+</body>
+</html> 

@@ -1,0 +1,307 @@
+/* Main Styles - Import modular CSS files */
+@import url('base.css');
+@import url('forms.css');
+
+/* Additional specific styles not covered in modular files */
+
+/* Summary page specific styles */
+.summary-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.summary-header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: var(--white);
+    padding: 40px;
+    border-radius: var(--border-radius);
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.summary-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    color: var(--white);
+}
+
+.summary-header p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    color: var(--white);
+}
+
+.summary-section {
+    background: var(--white);
+    border-radius: var(--border-radius);
+    padding: 30px;
+    margin-bottom: 25px;
+    box-shadow: var(--shadow);
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.section-icon {
+    font-size: 2rem;
+}
+
+.section-title {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.data-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.data-item {
+    background: var(--light-bg);
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.data-label {
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.data-value {
+    color: var(--primary-color);
+    font-size: 1rem;
+}
+
+.data-value.empty {
+    color: var(--text-light);
+    font-style: italic;
+}
+
+/* Risk assessment specific styles */
+.risk-assessment {
+    background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+    border: 2px solid var(--primary-color);
+}
+
+.risk-score {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.risk-indicator {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--white);
+}
+
+.risk-low { background: var(--success-color); }
+.risk-moderate { background: var(--warning-color); }
+.risk-high { background: var(--danger-color); }
+
+/* Download section */
+.download-section {
+    background: var(--light-bg);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    text-align: center;
+    margin-top: 30px;
+}
+
+.download-btn {
+    background: linear-gradient(135deg, var(--success-color) 0%, #2ecc71 100%);
+    color: var(--white);
+    border: none;
+    padding: 15px 40px;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+}
+
+.download-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+}
+
+/* Risk assessment controls */
+.risk-assessment-controls {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.risk-assessment-btn {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: var(--white);
+    border: none;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 4px 15px rgba(26, 54, 93, 0.3);
+}
+
+.risk-assessment-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(26, 54, 93, 0.4);
+}
+
+.risk-assessment-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Risk recommendations */
+.risk-recommendations {
+    background: var(--light-bg);
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.risk-recommendations h4 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.recommendation-item {
+    margin-bottom: 10px;
+    padding-left: 20px;
+    position: relative;
+}
+
+.recommendation-item:before {
+    content: "•";
+    color: var(--primary-color);
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+/* AI Analysis specific styles */
+.analysis-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.analysis-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.analysis-header h1 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.analysis-header p {
+    color: var(--text-light);
+    font-size: 16px;
+}
+
+.ai-analysis-box {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: var(--white);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    margin-bottom: 30px;
+    box-shadow: var(--shadow);
+}
+
+.ai-analysis-box h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    text-align: center;
+}
+
+.ai-analysis-content {
+    line-height: 1.8;
+    font-size: 16px;
+    white-space: pre-wrap;
+}
+
+/* Loading and error states */
+.loading {
+    text-align: center;
+    padding: 50px;
+    color: var(--text-light);
+}
+
+.loading-spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.error-message {
+    background: #fee;
+    border: 1px solid #fcc;
+    color: var(--danger-color);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .summary-container {
+        padding: 15px;
+    }
+    
+    .summary-header {
+        padding: 30px 20px;
+    }
+    
+    .summary-header h1 {
+        font-size: 2rem;
+    }
+    
+    .data-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .analysis-container {
+        padding: 15px;
+    }
+    
+    .ai-analysis-box {
+        padding: 20px;
+    }
+} 

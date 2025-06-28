@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurer Underwriting Risk Assessment</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f7fa;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 650px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 4px 32px rgba(0,0,0,0.10);
+            padding: 36px 44px 28px 44px;
+        }
+        h1 {
+            text-align: center;
+            color: #1a365d;
+            margin-bottom: 28px;
+            font-size: 2.1rem;
+            letter-spacing: 1px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        label {
+            font-weight: 500;
+            color: #2d3a4a;
+            margin-bottom: 4px;
+        }
+        input, select, textarea {
+            padding: 11px;
+            border: 1px solid #cfd8dc;
+            border-radius: 6px;
+            font-size: 1rem;
+            background: #f9fafb;
+        }
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+        }
+        .form-row {
+            display: flex;
+            gap: 18px;
+        }
+        .form-row > div {
+            flex: 1;
+        }
+        .submit-btn {
+            background: linear-gradient(90deg, #1a365d 60%, #274472 100%);
+            color: #fff;
+            border: none;
+            padding: 13px;
+            border-radius: 6px;
+            font-size: 1.15rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 14px;
+            transition: background 0.2s;
+            box-shadow: 0 2px 8px rgba(26,54,93,0.08);
+        }
+        .submit-btn:hover {
+            background: linear-gradient(90deg, #274472 60%, #1a365d 100%);
+        }
+        .results {
+            margin-top: 36px;
+            padding: 28px 22px;
+            background: #e3f2fd;
+            border-radius: 10px;
+            border: 1px solid #b3c6e0;
+            box-shadow: 0 2px 8px rgba(30,64,124,0.07);
+        }
+        .results h2 {
+            color: #1a365d;
+            margin-top: 0;
+            font-size: 1.3rem;
+            margin-bottom: 16px;
+        }
+        .summary-block {
+            font-size: 1.08rem;
+            line-height: 1.7;
+            background: #f7fbff;
+            border-radius: 8px;
+            padding: 18px 16px;
+            border: 1px solid #cfe2f3;
+            white-space: pre-line;
+            margin-bottom: 0;
+        }
+        .summary-block strong {
+            font-weight: 700;
+            color: #1a365d;
+        }
+        .summary-block .emoji {
+            font-size: 1.2em;
+            vertical-align: middle;
+        }
+        @media (max-width: 700px) {
+            .container {
+                padding: 18px 4px;
+            }
+            .form-row {
+                flex-direction: column;
+            }
+            .results {
+                padding: 16px 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Underwriting Risk Assessment</h1>
+        <form id="risk-form">
+            <div class="form-row">
+                <div>
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div>
+                    <label for="age">Age</label>
+                    <input type="number" id="age" name="age" min="0" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div>
+                    <label for="location">Location</label>
+                    <input type="text" id="location" name="location" required>
+                </div>
+                <div>
+                    <label for="occupation">Occupation</label>
+                    <input type="text" id="occupation" name="occupation" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div>
+                    <label for="steps">Steps per Day</label>
+                    <input type="number" id="steps" name="steps_per_day" min="0">
+                </div>
+                <div>
+                    <label for="bmi">BMI</label>
+                    <input type="number" id="bmi" name="bmi" step="0.1">
+                </div>
+            </div>
+            <div class="form-row">
+                <div>
+                    <label><input type="checkbox" id="smoker" name="smoker"> Smoker</label>
+                </div>
+                <div>
+                    <label for="conditions">Pre-existing Conditions</label>
+                    <input type="text" id="conditions" name="pre_existing_conditions">
+                </div>
+            </div>
+            <button type="submit" class="submit-btn">Assess Risk</button>
+        </form>
+        <div class="results" id="results-block" style="display:none;">
+            <h2>Assessment Results</h2>
+            <div class="summary-block" id="summary-block">-</div>
+        </div>
+    </div>
+    <script>
+    // Simple markdown-like rendering for summary
+    function renderSummary(summary) {
+        // Replace **bold** with <strong>
+        summary = summary.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        // Replace newlines with <br>
+        summary = summary.replace(/\n/g, '<br>');
+        // Make emojis a bit bigger
+        summary = summary.replace(/([\u{1F300}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}])/gu, '<span class="emoji">$1</span>');
+        return summary;
+    }
+    document.getElementById('risk-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const form = e.target;
+        const data = {
+            name: form.name.value,
+            age: parseInt(form.age.value),
+            location: form.location.value,
+            occupation: form.occupation.value,
+            steps_per_day: form.steps_per_day.value ? parseInt(form.steps_per_day.value) : 0,
+            bmi: form.bmi.value ? parseFloat(form.bmi.value) : null,
+            smoker: form.smoker.checked,
+            pre_existing_conditions: form.pre_existing_conditions.value || null
+        };
+        const res = await fetch('/assess_risk', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        if (res.ok) {
+            const result = await res.json();
+            document.getElementById('summary-block').innerHTML = renderSummary(result.summary);
+            document.getElementById('results-block').style.display = 'block';
+        } else {
+            document.getElementById('summary-block').innerHTML = '<span style="color:red;">Error assessing risk. Please check your input.</span>';
+            document.getElementById('results-block').style.display = 'block';
+        }
+    });
+    </script>
+</body>
+</html> 

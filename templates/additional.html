@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Additional Details - Underwriting Risk Assessment</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Additional Details</h1>
+            <p>Tell us more about your lifestyle and habits</p>
+        </div>
+        <div class="form-container">
+            <div class="success-message" id="success-message">
+                ✅ Lifestyle details saved! Redirecting to family details...
+            </div>
+            <form id="additional-form">
+                <div class="form-section">
+                    <h2 class="section-title">Lifestyle & Work</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="occupation" class="required">Occupation</label>
+                            <input type="text" id="occupation" name="occupation" placeholder="e.g. Delivery agent, IT Engineer" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="required">Working Type</label>
+                            <select id="workingType" name="workingType" required>
+                                <option value="">Select</option>
+                                <option value="Remote job">Remote job</option>
+                                <option value="Onsite job">Onsite job</option>
+                                <option value="Hybrid job">Hybrid job</option>
+                                <option value="Field job">Field job</option>
+                                <option value="Driver">Driver</option>
+                                <option value="Freelancer">Freelancer</option>
+                                <option value="Business owner">Business owner</option>
+                                <option value="Student">Student</option>
+                                <option value="Unemployed">Unemployed</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="steps" class="required">Daily Steps / Distance</label>
+                            <select id="stepsType" name="stepsType" required onchange="toggleStepsInput()">
+                                <option value="">Select measurement type</option>
+                                <option value="steps">Steps per day</option>
+                                <option value="distance">Distance traveled (km)</option>
+                                <option value="estimation">Rough estimation</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="stepsInputGroup" style="display: none;">
+                            <label for="steps" class="required">Value</label>
+                            <input type="number" id="steps" name="steps" min="0" placeholder="Enter value" required>
+                            <div id="stepsHint" class="field-hint"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="sleep">Sleep Hours (optional)</label>
+                            <input type="number" id="sleep" name="sleep" min="0" max="24" placeholder="e.g. 6">
+                        </div>
+                        <div class="form-group">
+                            <label for="bmi">BMI (optional)</label>
+                            <input type="number" id="bmi" name="bmi" step="0.1" min="10" max="50" placeholder="e.g. 28.4">
+                        </div>
+                        <div class="form-group">
+                            <label class="required">Smoker / Tobacco User</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" id="smoker-yes" name="smoker" value="yes" required>
+                                    <label for="smoker-yes">Yes</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="smoker-no" name="smoker" value="no">
+                                    <label for="smoker-no">No</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="alcohol" class="required">Alcohol Consumption</label>
+                            <select id="alcohol" name="alcohol" required>
+                                <option value="">Select</option>
+                                <option value="Never">Never</option>
+                                <option value="Occasionally">Occasionally</option>
+                                <option value="Regularly">Regularly</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="hobbies">Hobbies</label>
+                            <input type="text" id="hobbies" name="hobbies" placeholder="e.g. Trekking, Gym, None">
+                        </div>
+                        <div class="form-group">
+                            <label for="commute" class="required">Commute Type</label>
+                            <select id="commute" name="commute" required>
+                                <option value="">Select</option>
+                                <option value="Own bike">Own bike</option>
+                                <option value="Own car">Own car</option>
+                                <option value="Public bus">Public bus</option>
+                                <option value="Train">Train</option>
+                                <option value="Metro">Metro</option>
+                                <option value="Walk">Walk</option>
+                                <option value="Bike + Public transport">Bike + Public transport</option>
+                                <option value="Car + Public transport">Car + Public transport</option>
+                                <option value="Work from home">Work from home</option>
+                                <option value="No commute">No commute</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" onclick="goBack()">Back</button>
+                    <button type="submit" class="btn btn-primary">Submit & Continue</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        // Navigation
+        function goBack() {
+            window.location.href = '/basics';
+        }
+
+        // Handle steps input type selection
+        function toggleStepsInput() {
+            const stepsType = document.getElementById('stepsType').value;
+            const stepsInputGroup = document.getElementById('stepsInputGroup');
+            const stepsInput = document.getElementById('steps');
+            const stepsHint = document.getElementById('stepsHint');
+
+            if (stepsType) {
+                stepsInputGroup.style.display = 'block';
+                
+                switch(stepsType) {
+                    case 'steps':
+                        stepsInput.placeholder = 'e.g. 4000';
+                        stepsHint.textContent = 'Enter your average daily step count';
+                        break;
+                    case 'distance':
+                        stepsInput.placeholder = 'e.g. 3.5';
+                        stepsHint.textContent = 'Enter distance in kilometers';
+                        break;
+                    case 'estimation':
+                        stepsInput.placeholder = 'e.g. 5000';
+                        stepsHint.textContent = 'Estimate your daily activity level (steps equivalent)';
+                        break;
+                }
+            } else {
+                stepsInputGroup.style.display = 'none';
+            }
+        }
+
+        // Load saved data
+        function loadSavedData() {
+            const savedData = localStorage.getItem('additionalInfo');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                
+                // Populate form fields
+                Object.keys(data).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        if (element.type === 'radio') {
+                            const radioElement = document.querySelector(`input[name="${key}"][value="${data[key]}"]`);
+                            if (radioElement) {
+                                radioElement.checked = true;
+                            }
+                        } else {
+                            element.value = data[key];
+                        }
+                    }
+                });
+                
+                // Handle steps data
+                if (data.steps_measurement_type) {
+                    document.getElementById('stepsType').value = data.steps_measurement_type;
+                    toggleStepsInput();
+                    if (data.steps_per_day) {
+                        document.getElementById('steps').value = data.steps_per_day;
+                    }
+                }
+            }
+        }
+
+        // Form submission
+        const form = document.getElementById('additional-form');
+        const successMessage = document.getElementById('success-message');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Collect form data
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+            
+            // Handle steps data
+            if (data.stepsType && data.steps) {
+                data.steps_per_day = parseInt(data.steps);
+                data.steps_measurement_type = data.stepsType;
+            }
+            
+            // Remove the temporary fields
+            delete data.steps;
+            delete data.stepsType;
+            
+            // Store in localStorage
+            localStorage.setItem('additionalInfo', JSON.stringify(data));
+            
+            // Save to server
+            fetch('/api/save_additional', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    // Show success and redirect
+                    successMessage.style.display = 'block';
+                    setTimeout(() => {
+                        window.location.href = '/familydetails';
+                    }, 2000);
+                } else {
+                    alert('Error saving data: ' + result.error);
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('Error saving data. Please try again.');
+            });
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSavedData();
+        });
+    </script>
+</body>
+</html> 

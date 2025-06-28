@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial & Employment Info - Underwriting Risk Assessment</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Financial & Employment Info</h1>
+            <p>Tell us about your employment and financial situation</p>
+        </div>
+
+        <div class="form-container">
+            <div class="success-message" id="success-message">
+                ✅ Financial details saved! Redirecting to insurance coverage...
+            </div>
+
+            <form id="finances-form">
+                <!-- Employment Information Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Employment Information</h2>
+                    
+                    <div class="employment-details">
+                        <div class="employment-status-section">
+                            <label class="required">Employment Status</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" id="salaried" name="employmentStatus" value="salaried" required onchange="toggleEmploymentFields()">
+                                    <label for="salaried">Salaried</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="freelancer" name="employmentStatus" value="freelancer" onchange="toggleEmploymentFields()">
+                                    <label for="freelancer">Freelancer</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="business" name="employmentStatus" value="business" onchange="toggleEmploymentFields()">
+                                    <label for="business">Business Owner</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="student" name="employmentStatus" value="student" onchange="toggleEmploymentFields()">
+                                    <label for="student">Student</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="unemployed" name="employmentStatus" value="unemployed" onchange="toggleEmploymentFields()">
+                                    <label for="unemployed">Unemployed</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="companyDetails" style="display: none;">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="companyName">Company Name</label>
+                                    <input type="text" id="companyName" name="companyName" placeholder="e.g. TCS, Infosys">
+                                </div>
+                                <div class="form-group">
+                                    <label for="jobTitle">Job Title</label>
+                                    <input type="text" id="jobTitle" name="jobTitle" placeholder="e.g. Software Engineer">
+                                </div>
+                                <div class="form-group">
+                                    <label for="experienceYears">Years of Experience</label>
+                                    <input type="number" id="experienceYears" name="experienceYears" min="0" max="50" placeholder="e.g. 5">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Income Information Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Income Information</h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="totalCTC" class="required">Total CTC (Annual)</label>
+                            <div class="currency-input">
+                                <input type="number" id="totalCTC" name="totalCTC" min="0" placeholder="e.g. 1200000" required onchange="updateSummary()">
+                            </div>
+                            <div class="field-hint">Cost to Company - Total annual package (e.g., 12 LPA = 1200000)</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="monthlySalary" class="required">In-hand Monthly Salary</label>
+                            <div class="currency-input">
+                                <input type="number" id="monthlySalary" name="monthlySalary" min="0" placeholder="e.g. 73000" required onchange="updateSummary()">
+                            </div>
+                            <div class="field-hint">Take-home salary after all deductions (e.g., 73,000 from 12 LPA CTC)</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="incomeStability" class="required">Income Source Stability</label>
+                            <select id="incomeStability" name="incomeStability" required>
+                                <option value="">Select stability level</option>
+                                <option value="high">High - Very stable income</option>
+                                <option value="medium">Medium - Moderately stable</option>
+                                <option value="low">Low - Variable income</option>
+                            </select>
+                            <div class="field-hint">How stable is your income source?</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Expenses & Liabilities Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Expenses & Liabilities</h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="existingEMIs" class="required">Existing EMIs (Monthly)</label>
+                            <div class="currency-input">
+                                <input type="number" id="existingEMIs" name="existingEMIs" min="0" placeholder="e.g. 10000" required onchange="updateSummary()">
+                            </div>
+                            <div class="field-hint">Include total amount of all your monthly EMIs: Home loan, car loan, personal loan, credit card EMIs, Buy Now Pay Later (BNPL) payments, and any other installment payments</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="monthlyExpenses" class="required">Monthly Expenses</label>
+                            <div class="currency-input">
+                                <input type="number" id="monthlyExpenses" name="monthlyExpenses" min="0" placeholder="e.g. 30000" required onchange="updateSummary()">
+                            </div>
+                            <div class="field-hint">Rent, utilities, groceries, etc.</div>
+                        </div>
+                    </div>
+
+                    <!-- Financial Summary -->
+                    <div class="financial-summary" id="financialSummary">
+                        <h3 style="margin-bottom: 15px; color: #1a365d;">Financial Summary</h3>
+                        <div class="summary-item">
+                            <span class="summary-label">Monthly Income:</span>
+                            <span class="summary-value" id="summaryIncome">Rs.0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Monthly EMIs:</span>
+                            <span class="summary-value" id="summaryEMIs">Rs.0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Monthly Expenses:</span>
+                            <span class="summary-value" id="summaryExpenses">Rs.0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Disposable Income:</span>
+                            <span class="summary-value" id="summaryDisposable">Rs.0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" onclick="goBack()">Back</button>
+                    <button type="submit" class="btn btn-primary">Submit & Continue</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Navigation
+        function goBack() {
+            window.location.href = '/familydetails';
+        }
+
+        // Toggle employment fields based on status
+        function toggleEmploymentFields() {
+            const employmentStatus = document.querySelector('input[name="employmentStatus"]:checked').value;
+            const companyDetails = document.getElementById('companyDetails');
+            
+            if (['salaried', 'freelancer'].includes(employmentStatus)) {
+                companyDetails.style.display = 'block';
+            } else {
+                companyDetails.style.display = 'none';
+            }
+        }
+
+        // Update financial summary
+        function updateSummary() {
+            const monthlySalary = parseFloat(document.getElementById('monthlySalary').value) || 0;
+            const existingEMIs = parseFloat(document.getElementById('existingEMIs').value) || 0;
+            const monthlyExpenses = parseFloat(document.getElementById('monthlyExpenses').value) || 0;
+            
+            const disposableIncome = monthlySalary - existingEMIs - monthlyExpenses;
+            
+            document.getElementById('summaryIncome').textContent = `Rs.${monthlySalary.toLocaleString()}`;
+            document.getElementById('summaryEMIs').textContent = `Rs.${existingEMIs.toLocaleString()}`;
+            document.getElementById('summaryExpenses').textContent = `Rs.${monthlyExpenses.toLocaleString()}`;
+            document.getElementById('summaryDisposable').textContent = `Rs.${disposableIncome.toLocaleString()}`;
+            
+            // Color code disposable income
+            const disposableElement = document.getElementById('summaryDisposable');
+            if (disposableIncome < 0) {
+                disposableElement.style.color = '#e74c3c';
+            } else if (disposableIncome < 10000) {
+                disposableElement.style.color = '#f39c12';
+            } else {
+                disposableElement.style.color = '#27ae60';
+            }
+        }
+
+        // Load saved data
+        function loadSavedData() {
+            const savedData = localStorage.getItem('financialInfo');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                
+                // Populate form fields
+                Object.keys(data).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        if (element.type === 'radio') {
+                            const radioElement = document.querySelector(`input[name="${key}"][value="${data[key]}"]`);
+                            if (radioElement) {
+                                radioElement.checked = true;
+                                if (key === 'employmentStatus') {
+                                    toggleEmploymentFields();
+                                }
+                            }
+                        } else {
+                            element.value = data[key];
+                        }
+                    }
+                });
+                
+                updateSummary();
+            }
+        }
+
+        // Form submission
+        const form = document.getElementById('finances-form');
+        const successMessage = document.getElementById('success-message');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate form
+            const monthlySalary = parseFloat(document.getElementById('monthlySalary').value) || 0;
+            const existingEMIs = parseFloat(document.getElementById('existingEMIs').value) || 0;
+            const monthlyExpenses = parseFloat(document.getElementById('monthlyExpenses').value) || 0;
+            
+            if (existingEMIs + monthlyExpenses > monthlySalary) {
+                alert('Warning: Your expenses and EMIs exceed your monthly income. Please review your financial details.');
+                return;
+            }
+            
+            // Collect form data
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+            
+            // Add calculated fields
+            data.disposableIncome = monthlySalary - existingEMIs - monthlyExpenses;
+            data.monthlyIncome = monthlySalary;
+            
+            // Store in localStorage
+            localStorage.setItem('financialInfo', JSON.stringify(data));
+            
+            // Save to server
+            fetch('/api/save_finances', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    // Show success and redirect
+                    successMessage.style.display = 'block';
+                    setTimeout(() => {
+                        window.location.href = '/coverage';
+                    }, 2000);
+                } else {
+                    alert('Error saving data: ' + result.error);
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('Error saving data. Please try again.');
+            });
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSavedData();
+        });
+    </script>
+</body>
+</html> 

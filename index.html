@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurer Underwriting Risk Assessment</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Underwriting Risk Assessment</h1>
+        <form>
+            <div class="form-row">
+                <div>
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div>
+                    <label for="age">Age</label>
+                    <input type="number" id="age" name="age" min="0" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div>
+                    <label for="location">Location</label>
+                    <input type="text" id="location" name="location" required>
+                </div>
+                <div>
+                    <label for="occupation">Occupation</label>
+                    <input type="text" id="occupation" name="occupation" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div>
+                    <label for="steps">Steps per Day</label>
+                    <input type="number" id="steps" name="steps_per_day" min="0">
+                </div>
+                <div>
+                    <label for="bmi">BMI</label>
+                    <input type="number" id="bmi" name="bmi" step="0.1">
+                </div>
+            </div>
+            <div class="form-row">
+                <div>
+                    <label><input type="checkbox" id="smoker" name="smoker"> Smoker</label>
+                </div>
+                <div>
+                    <label for="conditions">Pre-existing Conditions</label>
+                    <input type="text" id="conditions" name="pre_existing_conditions">
+                </div>
+            </div>
+            <button type="submit" class="submit-btn">Assess Risk</button>
+        </form>
+        <div class="results">
+            <h2>Assessment Results</h2>
+            <p><strong>Risk Level:</strong> <span id="risk-level">-</span></p>
+            <p><strong>Summary:</strong> <span id="summary">-</span></p>
+            <p><strong>Recommended Cover:</strong> <span id="cover">-</span></p>
+            <p><strong>Suggested Premium:</strong> <span id="premium">-</span></p>
+            <p><strong>Deductible:</strong> <span id="deductible">-</span></p>
+            <p><strong>Recommended Riders:</strong> <span id="riders">-</span></p>
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family & Dependents - Underwriting Risk Assessment</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        /* Improved checkbox design */
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            margin: 8px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .checkbox-container:hover {
+            border-color: #1a365d;
+            background: #f0f4f8;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(26, 54, 93, 0.1);
+        }
+
+        .checkbox-container.selected {
+            border-color: #1a365d;
+            background: #e3f2fd;
+            box-shadow: 0 2px 8px rgba(26, 54, 93, 0.2);
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            accent-color: #1a365d;
+        }
+
+        .checkbox-container label {
+            cursor: pointer;
+            font-weight: 500;
+            color: #2d3a4a;
+            flex: 1;
+        }
+
+        .checkbox-container.selected label {
+            color: #1a365d;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Family & Dependents</h1>
+            <p>Tell us about your family and medical history</p>
+        </div>
+
+        <div class="form-container">
+            <div class="success-message" id="success-message">
+                ✅ Family details saved! Redirecting to financial information...
+            </div>
+
+            <form id="family-form">
+                <!-- Dependents Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Dependents Information</h2>
+                    
+                    <div class="form-group">
+                        <label for="numDependents" class="required">Number of Dependents</label>
+                        <select id="numDependents" name="numDependents" required onchange="updateDependents()">
+                            <option value="">Select number</option>
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6+">6+</option>
+                        </select>
+                        <div class="field-hint">Include spouse, children, parents, and other family members who depend on you financially</div>
+                    </div>
+
+                    <div class="dependents-section" id="dependentsSection" style="display: none;">
+                        <h3 style="margin-bottom: 15px; color: #1a365d;">Dependent Details</h3>
+                        <div id="dependentsList"></div>
+                        <button type="button" class="add-dependent-btn" onclick="addDependent()">+ Add Another Dependent</button>
+                    </div>
+                </div>
+
+                <!-- Family Medical History Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Family Medical History</h2>
+                    
+                    <div class="form-group">
+                        <label>Select conditions that run in your family:</label>
+                        <div class="medical-history-grid">
+                            <div class="checkbox-container" onclick="toggleCheckbox('diabetes')">
+                                <input type="checkbox" id="diabetes" name="medicalHistory" value="diabetes">
+                                <label for="diabetes">Diabetes</label>
+                            </div>
+                            <div class="checkbox-container" onclick="toggleCheckbox('cancer')">
+                                <input type="checkbox" id="cancer" name="medicalHistory" value="cancer">
+                                <label for="cancer">Cancer</label>
+                            </div>
+                            <div class="checkbox-container" onclick="toggleCheckbox('heartDisease')">
+                                <input type="checkbox" id="heartDisease" name="medicalHistory" value="heartDisease">
+                                <label for="heartDisease">Heart Disease</label>
+                            </div>
+                            <div class="checkbox-container" onclick="toggleCheckbox('hypertension')">
+                                <input type="checkbox" id="hypertension" name="medicalHistory" value="hypertension">
+                                <label for="hypertension">Hypertension</label>
+                            </div>
+                            <div class="checkbox-container" onclick="toggleCheckbox('asthma')">
+                                <input type="checkbox" id="asthma" name="medicalHistory" value="asthma">
+                                <label for="asthma">Asthma</label>
+                            </div>
+                            <div class="checkbox-container" onclick="toggleCheckbox('obesity')">
+                                <input type="checkbox" id="obesity" name="medicalHistory" value="obesity">
+                                <label for="obesity">Obesity</label>
+                            </div>
+                            <div class="checkbox-container" onclick="toggleCheckbox('mentalHealth')">
+                                <input type="checkbox" id="mentalHealth" name="medicalHistory" value="mentalHealth">
+                                <label for="mentalHealth">Mental Health Issues</label>
+                            </div>
+                            <div class="checkbox-container" onclick="toggleCheckbox('stroke')">
+                                <input type="checkbox" id="stroke" name="medicalHistory" value="stroke">
+                                <label for="stroke">Stroke</label>
+                            </div>
+                            <div class="checkbox-container" onclick="toggleCheckbox('kidneyDisease')">
+                                <input type="checkbox" id="kidneyDisease" name="medicalHistory" value="kidneyDisease">
+                                <label for="kidneyDisease">Kidney Disease</label>
+                            </div>
+                            <div class="checkbox-container" onclick="toggleCheckbox('liverDisease')">
+                                <input type="checkbox" id="liverDisease" name="medicalHistory" value="liverDisease">
+                                <label for="liverDisease">Liver Disease</label>
+                            </div>
+                            <div class="checkbox-container" onclick="toggleCheckbox('thyroid')">
+                                <input type="checkbox" id="thyroid" name="medicalHistory" value="thyroid">
+                                <label for="thyroid">Thyroid Disorders</label>
+                            </div>
+                            <div class="checkbox-container" onclick="toggleCheckbox('arthritis')">
+                                <input type="checkbox" id="arthritis" name="medicalHistory" value="arthritis">
+                                <label for="arthritis">Arthritis</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="otherConditions">Other Medical Conditions (optional)</label>
+                        <textarea id="otherConditions" name="otherConditions" placeholder="Please specify any other medical conditions that run in your family..."></textarea>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" onclick="goBack()">Back</button>
+                    <button type="submit" class="btn btn-primary">Submit & Continue</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let dependentCount = 0;
+
+        // Navigation
+        function goBack() {
+            window.location.href = '/additional';
+        }
+
+        // Toggle checkbox with improved design
+        function toggleCheckbox(checkboxId) {
+            const checkbox = document.getElementById(checkboxId);
+            const container = checkbox.closest('.checkbox-container');
+            
+            // Toggle the checkbox
+            checkbox.checked = !checkbox.checked;
+            
+            // Update visual state
+            if (checkbox.checked) {
+                container.classList.add('selected');
+            } else {
+                container.classList.remove('selected');
+            }
+        }
+
+        // Update dependents section based on selection
+        function updateDependents() {
+            const numDependents = document.getElementById('numDependents').value;
+            const dependentsSection = document.getElementById('dependentsSection');
+            const dependentsList = document.getElementById('dependentsList');
+
+            if (numDependents && numDependents !== '0') {
+                dependentsSection.style.display = 'block';
+                dependentsList.innerHTML = '';
+                dependentCount = 0;
+
+                const count = numDependents === '6+' ? 6 : parseInt(numDependents);
+                for (let i = 0; i < count; i++) {
+                    addDependent();
+                }
+            } else {
+                dependentsSection.style.display = 'none';
+            }
+        }
+
+        // Add a new dependent
+        function addDependent() {
+            const dependentsList = document.getElementById('dependentsList');
+            const dependentDiv = document.createElement('div');
+            dependentDiv.className = 'dependent-item';
+            dependentDiv.innerHTML = `
+                <div class="dependent-header">
+                    <span class="dependent-title">Dependent ${dependentCount + 1}</span>
+                    <button type="button" class="remove-dependent" onclick="removeDependent(this)">Remove</button>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Relationship</label>
+                        <select name="dependent_${dependentCount}_relation" required>
+                            <option value="">Select relationship</option>
+                            <option value="spouse">Spouse</option>
+                            <option value="child">Child</option>
+                            <option value="parent">Parent</option>
+                            <option value="sibling">Sibling</option>
+                            <option value="grandparent">Grandparent</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Age</label>
+                        <input type="number" name="dependent_${dependentCount}_age" min="0" max="120" placeholder="Age" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <select name="dependent_${dependentCount}_gender" required>
+                            <option value="">Select gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Financial Dependency</label>
+                        <select name="dependent_${dependentCount}_dependency" required>
+                            <option value="">Select dependency level</option>
+                            <option value="fully">Fully dependent</option>
+                            <option value="partially">Partially dependent</option>
+                            <option value="minimal">Minimally dependent</option>
+                        </select>
+                    </div>
+                </div>
+            `;
+            dependentsList.appendChild(dependentDiv);
+            dependentCount++;
+        }
+
+        // Remove a dependent
+        function removeDependent(button) {
+            button.closest('.dependent-item').remove();
+            // Renumber remaining dependents
+            const dependents = document.querySelectorAll('.dependent-item');
+            dependents.forEach((dependent, index) => {
+                dependent.querySelector('.dependent-title').textContent = `Dependent ${index + 1}`;
+            });
+            dependentCount--;
+        }
+
+        // Load saved data
+        function loadSavedData() {
+            const savedData = localStorage.getItem('familyInfo');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                
+                // Populate form fields
+                Object.keys(data).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        if (element.type === 'radio') {
+                            const radioElement = document.querySelector(`input[name="${key}"][value="${data[key]}"]`);
+                            if (radioElement) {
+                                radioElement.checked = true;
+                            }
+                        } else if (element.type === 'checkbox') {
+                            // Handle checkboxes
+                            if (data.familyMedicalHistory && data.familyMedicalHistory.includes(data[key])) {
+                                element.checked = true;
+                            }
+                        } else {
+                            element.value = data[key];
+                        }
+                    }
+                });
+                
+                // Handle dependents
+                if (data.numDependents) {
+                    updateDependents();
+                    // Populate dependent data if exists
+                    if (data.dependents) {
+                        data.dependents.forEach((dependent, index) => {
+                            // This would need more complex logic to restore dynamic dependents
+                        });
+                    }
+                }
+            }
+        }
+
+        // Form submission
+        const form = document.getElementById('family-form');
+        const successMessage = document.getElementById('success-message');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Collect form data
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+            
+            // Handle medical history checkboxes
+            const medicalHistory = formData.getAll('medicalHistory');
+            data.familyMedicalHistory = medicalHistory;
+            
+            // Store in localStorage
+            localStorage.setItem('familyInfo', JSON.stringify(data));
+            
+            // Save to server
+            fetch('/api/save_family', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    // Show success and redirect
+                    successMessage.style.display = 'block';
+                    setTimeout(() => {
+                        window.location.href = '/finances';
+                    }, 2000);
+                } else {
+                    alert('Error saving data: ' + result.error);
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('Error saving data. Please try again.');
+            });
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSavedData();
+        });
+    </script>
+</body>
+</html> 

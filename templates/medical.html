@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Information - Underwriting Risk Assessment</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Medical Information</h1>
+            <p>Please provide your medical details for accurate risk assessment</p>
+        </div>
+
+        <div class="form-container">
+            <div class="success-message" id="success-message">
+                ✅ Medical information saved! Redirecting to preferences...
+            </div>
+
+            <form id="medical-form">
+                <!-- Pre-existing Conditions Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Pre-existing Medical Conditions</h2>
+                    <div class="form-group">
+                        <label for="preExistingConditions">Pre-existing Conditions</label>
+                        <textarea id="preExistingConditions" name="preExistingConditions" 
+                                placeholder="List any pre-existing medical conditions (e.g., Asthma, Hypertension, Diabetes, Heart Disease, etc.)"></textarea>
+                        <div class="field-hint">Include all diagnosed conditions, even if well-controlled</div>
+                    </div>
+                </div>
+
+                <!-- Recent Hospitalizations Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Recent Hospitalizations</h2>
+                    <div class="form-group">
+                        <label class="required">Have you been hospitalized in the last 5 years?</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="hospitalization-yes" name="hasHospitalizations" value="yes" required onchange="toggleHospitalizations()">
+                                <label for="hospitalization-yes">Yes</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="hospitalization-no" name="hasHospitalizations" value="no" onchange="toggleHospitalizations()">
+                                <label for="hospitalization-no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="hospitalizationDetails" style="display: none;">
+                        <div class="claim-history-section">
+                            <h3 style="margin-bottom: 15px; color: #1a365d;">Hospitalization Details</h3>
+                            <div id="hospitalizationList"></div>
+                            <button type="button" class="add-insurance-btn" onclick="addHospitalization()">+ Add Another Hospitalization</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Current Medications Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Current Medications</h2>
+                    <div class="form-group">
+                        <label class="required">Are you currently taking any medications?</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="medications-yes" name="hasMedications" value="yes" required onchange="toggleMedications()">
+                                <label for="medications-yes">Yes</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="medications-no" name="hasMedications" value="no" onchange="toggleMedications()">
+                                <label for="medications-no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="medicationDetails" style="display: none;">
+                        <div class="claim-history-section">
+                            <h3 style="margin-bottom: 15px; color: #1a365d;">Medication Details</h3>
+                            <div id="medicationList"></div>
+                            <button type="button" class="add-insurance-btn" onclick="addMedication()">+ Add Another Medication</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Allergies Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Allergies</h2>
+                    <div class="form-group">
+                        <label class="required">Do you have any known allergies?</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="allergies-yes" name="hasAllergies" value="yes" required onchange="toggleAllergies()">
+                                <label for="allergies-yes">Yes</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="allergies-no" name="hasAllergies" value="no" onchange="toggleAllergies()">
+                                <label for="allergies-no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="allergyDetails" style="display: none;">
+                        <div class="form-group">
+                            <label for="allergies">Allergy Details</label>
+                            <textarea id="allergies" name="allergies" 
+                                    placeholder="List your allergies (e.g., Penicillin, Peanuts, Dust, Latex, etc.)"></textarea>
+                            <div class="field-hint">Include food, drug, and environmental allergies</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Physical Measurements Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Physical Measurements</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="height" class="required">Height (cm)</label>
+                            <input type="number" id="height" name="height" min="100" max="250" placeholder="e.g., 168" required onchange="calculateBMI()">
+                            <div class="field-hint">Enter height in centimeters</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="weight" class="required">Weight (kg)</label>
+                            <input type="number" id="weight" name="weight" min="30" max="300" step="0.1" placeholder="e.g., 74.5" required onchange="calculateBMI()">
+                            <div class="field-hint">Enter weight in kilograms</div>
+                        </div>
+                    </div>
+                    
+                    <!-- BMI Display -->
+                    <div class="financial-summary" id="bmiSummary" style="display: none;">
+                        <h3 style="margin-bottom: 15px; color: #1a365d;">BMI Calculation</h3>
+                        <div class="summary-item">
+                            <span class="summary-label">Your BMI:</span>
+                            <span class="summary-value" id="bmiValue">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">BMI Category:</span>
+                            <span class="summary-value" id="bmiCategory">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Health Checkup Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Health Checkup History</h2>
+                    <div class="form-group">
+                        <label for="lastCheckup" class="required">Last Health Checkup Date</label>
+                        <input type="date" id="lastCheckup" name="lastCheckup" required>
+                        <div class="field-hint">When was your last comprehensive health checkup?</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="checkupFrequency">Health Checkup Frequency</label>
+                        <select id="checkupFrequency" name="checkupFrequency">
+                            <option value="">Select frequency</option>
+                            <option value="annually">Annually</option>
+                            <option value="bi_annually">Every 6 months</option>
+                            <option value="quarterly">Every 3 months</option>
+                            <option value="irregular">Irregular</option>
+                            <option value="never">Never</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Medical Summary -->
+                <div class="coverage-summary" id="medicalSummary">
+                    <h3 style="margin-bottom: 15px; color: #1a365d;">Medical Summary</h3>
+                    <div class="summary-item">
+                        <span class="summary-label">Pre-existing Conditions:</span>
+                        <span class="summary-value" id="summaryConditions">None declared</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Current Medications:</span>
+                        <span class="summary-value" id="summaryMedications">None</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Known Allergies:</span>
+                        <span class="summary-value" id="summaryAllergies">None</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Recent Hospitalizations:</span>
+                        <span class="summary-value" id="summaryHospitalizations">None</span>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" onclick="goBack()">Back</button>
+                    <button type="submit" class="btn btn-primary">Submit & Continue</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let hospitalizationCount = 0;
+        let medicationCount = 0;
+
+        // Navigation
+        function goBack() {
+            window.location.href = '/coverage';
+        }
+
+        // Toggle hospitalization details
+        function toggleHospitalizations() {
+            const hasHospitalizations = document.querySelector('input[name="hasHospitalizations"]:checked').value;
+            const hospitalizationDetails = document.getElementById('hospitalizationDetails');
+            
+            if (hasHospitalizations === 'yes') {
+                hospitalizationDetails.style.display = 'block';
+                if (hospitalizationCount === 0) {
+                    addHospitalization();
+                }
+            } else {
+                hospitalizationDetails.style.display = 'none';
+            }
+            updateMedicalSummary();
+        }
+    
+
+        // Toggle medication details
+        function toggleMedications() {
+            const hasMedications = document.querySelector('input[name="hasMedications"]:checked').value;
+            const medicationDetails = document.getElementById('medicationDetails');
+            
+            if (hasMedications === 'yes') {
+                medicationDetails.style.display = 'block';
+                if (medicationCount === 0) {
+                    addMedication();
+                }
+            } else {
+                medicationDetails.style.display = 'none';
+            }
+            updateMedicalSummary();
+        }
+
+        // Toggle allergy details
+        function toggleAllergies() {
+            const hasAllergies = document.querySelector('input[name="hasAllergies"]:checked').value;
+            const allergyDetails = document.getElementById('allergyDetails');
+            
+            if (hasAllergies === 'yes') {
+                allergyDetails.style.display = 'block';
+            } else {
+                allergyDetails.style.display = 'none';
+            }
+            updateMedicalSummary();
+        }
+
+        // Add hospitalization
+        function addHospitalization() {
+            const hospitalizationList = document.getElementById('hospitalizationList');
+            const hospitalizationDiv = document.createElement('div');
+            hospitalizationDiv.className = 'claim-item';
+            hospitalizationDiv.innerHTML = `
+                <div class="claim-header">
+                    <span class="claim-title">Hospitalization ${hospitalizationCount + 1}</span>
+                    <button type="button" class="remove-insurance" onclick="removeHospitalization(this)">Remove</button>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Year</label>
+                        <select name="hospitalization_year_${hospitalizationCount}" required>
+                            <option value="">Select year</option>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                            <option value="2022">2022</option>
+                            <option value="2021">2021</option>
+                            <option value="2020">2020</option>
+                            <option value="2019">2019</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Reason for Hospitalization</label>
+                        <input type="text" name="hospitalization_reason_${hospitalizationCount}" placeholder="e.g., Dengue, Surgery, Accident" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Duration (days)</label>
+                        <input type="number" name="hospitalization_duration_${hospitalizationCount}" min="1" max="365" placeholder="e.g., 5" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Hospital Name</label>
+                        <input type="text" name="hospitalization_hospital_${hospitalizationCount}" placeholder="e.g., Apollo Hospital">
+                    </div>
+                </div>
+            `;
+            hospitalizationList.appendChild(hospitalizationDiv);
+            hospitalizationCount++;
+        }
+
+        // Add medication
+        function addMedication() {
+            const medicationList = document.getElementById('medicationList');
+            const medicationDiv = document.createElement('div');
+            medicationDiv.className = 'claim-item';
+            medicationDiv.innerHTML = `
+                <div class="claim-header">
+                    <span class="claim-title">Medication ${medicationCount + 1}</span>
+                    <button type="button" class="remove-insurance" onclick="removeMedication(this)">Remove</button>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Medication Name</label>
+                        <input type="text" name="medication_name_${medicationCount}" placeholder="e.g., Amlodipine, Metformin" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Dosage</label>
+                        <input type="text" name="medication_dosage_${medicationCount}" placeholder="e.g., 5mg daily, 500mg twice daily" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Duration</label>
+                        <select name="medication_duration_${medicationCount}" required>
+                            <option value="">Select duration</option>
+                            <option value="temporary">Temporary (1-3 months)</option>
+                            <option value="long_term">Long-term (3+ months)</option>
+                            <option value="lifetime">Lifetime</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Prescribed For</label>
+                        <input type="text" name="medication_condition_${medicationCount}" placeholder="e.g., Hypertension, Diabetes">
+                    </div>
+                </div>
+            `;
+            medicationList.appendChild(medicationDiv);
+            medicationCount++;
+        }
+
+        // Remove hospitalization
+        function removeHospitalization(button) {
+            button.closest('.claim-item').remove();
+            // Renumber remaining hospitalizations
+            const hospitalizations = document.querySelectorAll('#hospitalizationList .claim-item');
+            hospitalizations.forEach((hospitalization, index) => {
+                hospitalization.querySelector('.claim-title').textContent = `Hospitalization ${index + 1}`;
+            });
+            hospitalizationCount--;
+            updateMedicalSummary();
+        }
+
+        // Remove medication
+        function removeMedication(button) {
+            button.closest('.claim-item').remove();
+            // Renumber remaining medications
+            const medications = document.querySelectorAll('#medicationList .claim-item');
+            medications.forEach((medication, index) => {
+                medication.querySelector('.claim-title').textContent = `Medication ${index + 1}`;
+            });
+            medicationCount--;
+            updateMedicalSummary();
+        }
+
+        // Calculate BMI
+        function calculateBMI() {
+            const height = parseFloat(document.getElementById('height').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const bmiSummary = document.getElementById('bmiSummary');
+            
+            if (height && weight) {
+                const heightInMeters = height / 100;
+                const bmi = weight / (heightInMeters * heightInMeters);
+                
+                document.getElementById('bmiValue').textContent = bmi.toFixed(1);
+                
+                let category, color;
+                if (bmi < 18.5) {
+                    category = 'Underweight';
+                    color = '#f39c12';
+                } else if (bmi < 25) {
+                    category = 'Normal Weight';
+                    color = '#27ae60';
+                } else if (bmi < 30) {
+                    category = 'Overweight';
+                    color = '#f39c12';
+                } else {
+                    category = 'Obese';
+                    color = '#e74c3c';
+                }
+                
+                document.getElementById('bmiCategory').textContent = category;
+                document.getElementById('bmiCategory').style.color = color;
+                bmiSummary.style.display = 'block';
+            } else {
+                bmiSummary.style.display = 'none';
+            }
+        }
+
+        // Update medical summary
+        function updateMedicalSummary() {
+            // Pre-existing conditions
+            const conditions = document.getElementById('preExistingConditions').value;
+            document.getElementById('summaryConditions').textContent = conditions || 'None declared';
+            
+            // Medications
+            const hasMedications = document.querySelector('input[name="hasMedications"]:checked');
+            if (hasMedications && hasMedications.value === 'yes') {
+                document.getElementById('summaryMedications').textContent = `${medicationCount} medication(s)`;
+            } else {
+                document.getElementById('summaryMedications').textContent = 'None';
+            }
+            
+            // Allergies
+            const hasAllergies = document.querySelector('input[name="hasAllergies"]:checked');
+            if (hasAllergies && hasAllergies.value === 'yes') {
+                const allergies = document.getElementById('allergies').value;
+                document.getElementById('summaryAllergies').textContent = allergies || 'Declared but not specified';
+            } else {
+                document.getElementById('summaryAllergies').textContent = 'None';
+            }
+            
+            // Hospitalizations
+            const hasHospitalizations = document.querySelector('input[name="hasHospitalizations"]:checked');
+            if (hasHospitalizations && hasHospitalizations.value === 'yes') {
+                document.getElementById('summaryHospitalizations').textContent = `${hospitalizationCount} hospitalization(s)`;
+            } else {
+                document.getElementById('summaryHospitalizations').textContent = 'None';
+            }
+        }
+
+        // Load saved data
+        function loadSavedData() {
+            const savedData = localStorage.getItem('medicalInfo');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                
+                // Populate form fields
+                Object.keys(data).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        if (element.type === 'radio') {
+                            const radioElement = document.querySelector(`input[name="${key}"][value="${data[key]}"]`);
+                            if (radioElement) {
+                                radioElement.checked = true;
+                            }
+                        } else {
+                            element.value = data[key];
+                        }
+                    }
+                });
+                
+                // Handle dynamic content (hospitalizations, medications)
+                // This would need more complex logic to restore dynamic content
+                calculateBMI();
+                updateMedicalSummary();
+            }
+        }
+
+        // Form submission
+        const form = document.getElementById('medical-form');
+        const successMessage = document.getElementById('success-message');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Calculate final BMI
+            calculateBMI();
+            
+            // Collect form data
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+            
+            // Add calculated BMI
+            const height = parseFloat(data.height);
+            const weight = parseFloat(data.weight);
+            if (height && weight) {
+                const heightInMeters = height / 100;
+                data.bmi = (weight / (heightInMeters * heightInMeters)).toFixed(1);
+            }
+            
+            // Store in localStorage
+            localStorage.setItem('medicalInfo', JSON.stringify(data));
+            
+            // Save to server
+            fetch('/api/save_medical', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    // Show success and redirect
+                    successMessage.style.display = 'block';
+                    setTimeout(() => {
+                        window.location.href = '/preferences';
+                    }, 2000);
+                } else {
+                    alert('Error saving data: ' + result.error);
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('Error saving data. Please try again.');
+            });
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSavedData();
+        });
+
+        // Set max date for last checkup (today)
+        const lastCheckupInput = document.getElementById('lastCheckup');
+        const today = new Date().toISOString().split('T')[0];
+        lastCheckupInput.max = today;
+    </script>
+</body>
+</html> 

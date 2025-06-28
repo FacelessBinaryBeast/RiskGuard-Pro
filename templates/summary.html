@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Summary - Underwriting Risk Assessment</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        .summary-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .summary-header {
+            background: linear-gradient(135deg, #1a365d 0%, #274472 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .summary-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .summary-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .summary-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e3f2fd;
+        }
+
+        .section-icon {
+            font-size: 2rem;
+        }
+
+        .section-title {
+            color: #1a365d;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .data-item {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #1a365d;
+        }
+
+        .data-label {
+            font-weight: 600;
+            color: #2d3a4a;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .data-value {
+            color: #1a365d;
+            font-size: 1rem;
+        }
+
+        .data-value.empty {
+            color: #999;
+            font-style: italic;
+        }
+
+        .risk-assessment {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            border: 2px solid #1a365d;
+        }
+
+        .risk-score {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .risk-indicator {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .risk-low { background: #27ae60; }
+        .risk-moderate { background: #f39c12; }
+        .risk-high { background: #e74c3c; }
+
+        .download-section {
+            background: #f8fafc;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+        }
+
+        .risk-assessment-controls {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .risk-assessment-btn {
+            background: linear-gradient(135deg, #1a365d 0%, #274472 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(26, 54, 93, 0.3);
+        }
+
+        .risk-assessment-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26, 54, 93, 0.4);
+        }
+
+        .risk-assessment-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .risk-recommendations {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid #1a365d;
+        }
+
+        .risk-recommendations h4 {
+            color: #1a365d;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .recommendation-item {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .recommendation-item:before {
+            content: "•";
+            color: #1a365d;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .risk-breakdown {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid #1a365d;
+        }
+
+        .risk-breakdown h4 {
+            color: #1a365d;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .breakdown-grid {
+            display: grid;
+            gap: 10px;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            border-left: 3px solid #e3f2fd;
+        }
+
+        .breakdown-item.total {
+            background: #e3f2fd;
+            border-left-color: #1a365d;
+            font-weight: 600;
+        }
+
+        .breakdown-label {
+            color: #2d3a4a;
+            font-weight: 500;
+        }
+
+        .breakdown-score {
+            color: #1a365d;
+            font-weight: 600;
+            background: #f0f4f8;
+            padding: 4px 8px;
+            border-radius: 4px;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .breakdown-item.total .breakdown-score {
+            background: #1a365d;
+            color: white;
+        }
+
+        .loading {
+            display: none;
+            margin-top: 15px;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #27ae60;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .navigation-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .nav-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-btn.primary {
+            background: linear-gradient(135deg, #1a365d 0%, #274472 100%);
+            color: white;
+        }
+
+        .nav-btn.secondary {
+            background: #f8fafc;
+            color: #1a365d;
+            border: 2px solid #1a365d;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Improved checkbox design */
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            margin: 8px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .checkbox-container:hover {
+            border-color: #1a365d;
+            background: #f0f4f8;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(26, 54, 93, 0.1);
+        }
+
+        .checkbox-container.selected {
+            border-color: #1a365d;
+            background: #e3f2fd;
+            box-shadow: 0 2px 8px rgba(26, 54, 93, 0.2);
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            accent-color: #1a365d;
+        }
+
+        .checkbox-container label {
+            cursor: pointer;
+            font-weight: 500;
+            color: #2d3a4a;
+            flex: 1;
+        }
+
+        .checkbox-container.selected label {
+            color: #1a365d;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .data-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .navigation-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="summary-container">
+        <!-- Summary Header -->
+        <div class="summary-header">
+            <h1>📋 Application Summary</h1>
+            <p>Complete overview of your underwriting risk assessment application</p>
+        </div>
+
+        <!-- Risk Assessment -->
+        <div class="summary-section risk-assessment">
+            <div class="section-header">
+                <span class="section-icon">📊</span>
+                <h2 class="section-title">Expected Risk Assessment Summary</h2>
+            </div>
+            
+            <div class="risk-assessment-controls">
+                <button class="risk-assessment-btn" onclick="generateRiskAssessment()">
+                    🔍 Generate Risk Assessment
+                </button>
+                <div class="loading" id="risk-loading">
+                    <div class="spinner"></div>
+                    <p>Generating risk assessment...</p>
+                </div>
+            </div>
+            
+            <div id="risk-assessment-content" style="display: none;">
+                <div class="risk-score">
+                    <div class="risk-indicator risk-moderate" id="risk-indicator">M</div>
+                    <div>
+                        <h3 id="risk-level">Moderate Risk</h3>
+                        <p id="risk-description">Your risk profile indicates moderate underwriting considerations</p>
+                    </div>
+                </div>
+                <div class="data-grid" id="risk-assessment-grid">
+                    <!-- Risk assessment data will be populated -->
+                </div>
+                
+                <div class="risk-recommendations" id="risk-recommendations">
+                    <!-- Risk recommendations will be populated -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Download Section -->
+        <div class="download-section">
+            <h3>📄 Download Complete Report</h3>
+            <p>Generate a comprehensive PDF report with all your application details</p>
+            <button class="download-btn" onclick="generatePDF()">
+                📥 Download PDF Report
+            </button>
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Generating PDF report...</p>
+            </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="navigation-buttons">
+            <button class="nav-btn secondary" onclick="goBack()">← Back to Preferences</button>
+            <a href="/ai_analysis" class="nav-btn primary">🤖 AI Risk Assessment</a>
+            <button class="nav-btn primary" onclick="startNewApplication()">🔄 Start New Application</button>
+        </div>
+    </div>
+
+    <script>
+        let allData = {};
+
+        // Load all data on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAllData();
+        });
+
+        // Load data from localStorage and server
+        async function loadAllData() {
+            // Load from localStorage
+            const localStorageData = {
+                basicInfo: JSON.parse(localStorage.getItem('basicInfo') || '{}'),
+                additionalInfo: JSON.parse(localStorage.getItem('additionalInfo') || '{}'),
+                familyInfo: JSON.parse(localStorage.getItem('familyInfo') || '{}'),
+                financialInfo: JSON.parse(localStorage.getItem('financialInfo') || '{}'),
+                coverageInfo: JSON.parse(localStorage.getItem('coverageInfo') || '{}'),
+                medicalInfo: JSON.parse(localStorage.getItem('medicalInfo') || '{}'),
+                preferencesInfo: JSON.parse(localStorage.getItem('preferencesInfo') || '{}')
+            };
+
+            // Load from server
+            try {
+                const response = await fetch('/api/get_all_data');
+                const serverData = await response.json();
+                
+                if (serverData.success) {
+                    allData = {
+                        basicInfo: { ...localStorageData.basicInfo, ...serverData.data.basic_info },
+                        additionalInfo: { ...localStorageData.additionalInfo, ...serverData.data.additional_info },
+                        familyInfo: { ...localStorageData.familyInfo, ...serverData.data.family_info },
+                        financialInfo: { ...localStorageData.financialInfo, ...serverData.data.financial_info },
+                        coverageInfo: { ...localStorageData.coverageInfo, ...serverData.data.coverage_info },
+                        medicalInfo: { ...localStorageData.medicalInfo, ...serverData.data.medical_info },
+                        preferencesInfo: { ...localStorageData.preferencesInfo, ...serverData.data.preferences_info }
+                    };
+                } else {
+                    allData = localStorageData;
+                }
+            } catch (error) {
+                console.log('Using localStorage data only');
+                allData = localStorageData;
+            }
+        }
+
+        function createDataItem(label, value, type = 'text') {
+            if (!value || value === '' || value === 'undefined') {
+                return `<div class="data-item"><div class="data-label">${label}</div><div class="data-value empty">Not provided</div></div>`;
+            }
+            
+            let displayValue = value;
+            if (type === 'currency' && !isNaN(value)) {
+                displayValue = 'Rs.' + parseInt(value).toLocaleString();
+            } else if (Array.isArray(value)) {
+                displayValue = value.join(', ') || 'None';
+            }
+            
+            return `<div class="data-item"><div class="data-label">${label}</div><div class="data-value">${displayValue}</div></div>`;
+        }
+
+        // Generate PDF
+        async function generatePDF() {
+            const loading = document.getElementById('loading');
+            const downloadBtn = document.querySelector('.download-btn');
+            
+            loading.style.display = 'block';
+            downloadBtn.disabled = true;
+            
+            try {
+                const response = await fetch('/api/generate_pdf', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(allData)
+                });
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'underwriting_assessment_report.pdf';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                } else {
+                    alert('Error generating PDF. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error generating PDF. Please try again.');
+            } finally {
+                loading.style.display = 'none';
+                downloadBtn.disabled = false;
+            }
+        }
+
+        // Navigation functions
+        function goBack() {
+            window.location.href = '/preferences';
+        }
+
+        function startNewApplication() {
+            if (confirm('Are you sure you want to start a new application? This will clear all saved data.')) {
+                localStorage.clear();
+                fetch('/api/clear_session', { method: 'POST' });
+                window.location.href = '/';
+            }
+        }
+
+        // Generate Risk Assessment
+        async function generateRiskAssessment() {
+            const riskBtn = document.querySelector('.risk-assessment-btn');
+            const riskLoading = document.getElementById('risk-loading');
+            const riskContent = document.getElementById('risk-assessment-content');
+            
+            riskBtn.disabled = true;
+            riskLoading.style.display = 'block';
+            riskContent.style.display = 'none';
+            
+            try {
+                // Calculate risk based on collected data
+                const riskScore = calculateRiskScore();
+                const riskLevel = getRiskLevel(riskScore);
+                
+                // Update risk display
+                document.getElementById('risk-level').textContent = riskLevel.level + ' Risk';
+                document.getElementById('risk-description').textContent = riskLevel.description;
+                
+                const riskIndicator = document.getElementById('risk-indicator');
+                riskIndicator.className = `risk-indicator risk-${riskLevel.level.toLowerCase().replace(' ', '-')}`;
+                riskIndicator.textContent = riskLevel.level.charAt(0);
+                
+                // Update risk assessment grid
+                const fields = [
+                    { key: 'riskScore', label: 'Risk Score', value: riskScore.totalScore + '/100' },
+                    { key: 'riskLevel', label: 'Risk Level', value: riskLevel.level },
+                    { key: 'riskRating', label: 'Risk Rating', value: riskLevel.rating },
+                    { key: 'recommendedCover', label: 'Recommended Cover', value: 'Rs.' + riskLevel.recommendedCover.toLocaleString() },
+                    { key: 'suggestedPremium', label: 'Suggested Premium', value: 'Rs.' + riskLevel.suggestedPremium.toLocaleString() }
+                ];
+
+                document.getElementById('risk-assessment-grid').innerHTML = fields.map(field => createDataItem(field.label, field.value)).join('');
+                
+                // Add detailed breakdown
+                const breakdownHtml = `
+                    <div class="risk-breakdown">
+                        <h4>📊 Risk Score Breakdown</h4>
+                        <div class="breakdown-grid">
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Age Factor:</span>
+                                <span class="breakdown-score">${riskScore.breakdown.age}/20</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Lifestyle Factors:</span>
+                                <span class="breakdown-score">${riskScore.breakdown.lifestyle}/25</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Medical Factors:</span>
+                                <span class="breakdown-score">${riskScore.breakdown.medical}/25</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Occupation Factors:</span>
+                                <span class="breakdown-score">${riskScore.breakdown.occupation}/15</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Financial Stability:</span>
+                                <span class="breakdown-score">${riskScore.breakdown.financial}/15</span>
+                            </div>
+                            <div class="breakdown-item total">
+                                <span class="breakdown-label">Total Risk Score:</span>
+                                <span class="breakdown-score">${riskScore.totalScore}/100</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('risk-assessment-grid').insertAdjacentHTML('afterend', breakdownHtml);
+                
+                // Generate recommendations
+                const recommendations = generateRecommendations(allData, riskScore);
+                document.getElementById('risk-recommendations').innerHTML = `
+                    <h4>📋 Risk Assessment Recommendations</h4>
+                    ${recommendations.map(rec => `<div class="recommendation-item">${rec}</div>`).join('')}
+                `;
+                
+                // Show the content
+                riskContent.style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error generating risk assessment:', error);
+                alert('Error generating risk assessment. Please try again.');
+            } finally {
+                riskBtn.disabled = false;
+                riskLoading.style.display = 'none';
+            }
+        }
+
+        function generateRecommendations(data, riskScore) {
+            const recommendations = [];
+            
+            // Age-based recommendations
+            const age = data.basicInfo?.age;
+            if (age > 50) {
+                recommendations.push("Consider increasing your health insurance coverage due to age-related risks.");
+            }
+            
+            // Smoking recommendations
+            if (data.additionalInfo?.smoker === 'yes') {
+                recommendations.push("Quitting smoking can significantly improve your risk profile and reduce premiums.");
+            }
+            
+            // BMI recommendations
+            const bmi = data.medicalInfo?.bmi;
+            if (bmi) {
+                const bmiVal = parseFloat(bmi);
+                if (bmiVal < 18.5 || bmiVal > 30) {
+                    recommendations.push("Maintaining a healthy BMI (18.5-24.9) can improve your risk assessment.");
+                }
+            }
+            
+            // Financial recommendations
+            const disposableIncome = data.financialInfo?.disposableIncome;
+            if (disposableIncome && parseFloat(disposableIncome) < 0) {
+                recommendations.push("Consider reducing expenses or increasing income to improve financial stability.");
+            }
+            
+            // Medical conditions
+            if (data.medicalInfo?.preExistingConditions) {
+                recommendations.push("Ensure all pre-existing conditions are properly disclosed to avoid claim rejections.");
+            }
+            
+            // Activity level
+            const steps = data.additionalInfo?.steps_per_day;
+            if (steps && parseInt(steps) < 5000) {
+                recommendations.push("Increasing daily physical activity can improve your health risk profile.");
+            }
+            
+            // Default recommendations based on risk level
+            if (riskScore.totalScore <= 20) {
+                recommendations.push("Excellent risk profile! Consider comprehensive coverage for maximum protection.");
+            } else if (riskScore.totalScore <= 35) {
+                recommendations.push("Good risk profile. Consider adding riders for enhanced coverage.");
+            } else {
+                recommendations.push("Higher risk profile. Focus on essential coverage and work on improving risk factors.");
+            }
+            
+            return recommendations;
+        }
+
+        function calculateRiskScore() {
+            let totalScore = 0;
+            const breakdown = {};
+            const data = allData;
+            
+            // 1. AGE FACTOR (20 points max)
+            let ageScore = 0;
+            if (data.basicInfo.age) {
+                const age = data.basicInfo.age;
+                if (age < 25) ageScore = 5;
+                else if (age < 30) ageScore = 8;
+                else if (age < 35) ageScore = 12;
+                else if (age < 40) ageScore = 16;
+                else if (age < 45) ageScore = 20;
+                else if (age < 50) ageScore = 25;
+                else if (age < 55) ageScore = 30;
+                else if (age < 60) ageScore = 35;
+                else ageScore = 40;
+            }
+            totalScore += ageScore;
+            breakdown.age = ageScore;
+            
+            // 2. LIFESTYLE FACTORS (25 points max)
+            let lifestyleScore = 0;
+            
+            // Smoking (10 points)
+            if (data.additionalInfo.smoker === 'yes') {
+                lifestyleScore += 10;
+            }
+            
+            // Alcohol consumption (5 points)
+            const alcohol = data.additionalInfo.alcohol;
+            if (alcohol === 'Regularly') {
+                lifestyleScore += 5;
+            } else if (alcohol === 'Occasionally') {
+                lifestyleScore += 2;
+            }
+            
+            // Physical activity (5 points)
+            const steps = data.additionalInfo.steps_per_day;
+            if (steps) {
+                const stepsVal = parseInt(steps);
+                if (stepsVal < 3000) lifestyleScore += 5;
+                else if (stepsVal < 5000) lifestyleScore += 3;
+                else if (stepsVal < 8000) lifestyleScore += 1;
+            }
+            
+            // BMI (5 points)
+            const bmi = data.medicalInfo.bmi;
+            if (bmi) {
+                const bmiVal = parseFloat(bmi);
+                if (bmiVal < 18.5 || bmiVal > 30) lifestyleScore += 5;
+                else if (bmiVal < 20 || bmiVal > 28) lifestyleScore += 3;
+                else if (bmiVal < 22 || bmiVal > 26) lifestyleScore += 1;
+            }
+            
+            totalScore += lifestyleScore;
+            breakdown.lifestyle = lifestyleScore;
+            
+            // 3. MEDICAL FACTORS (25 points max)
+            let medicalScore = 0;
+            
+            // Pre-existing conditions (15 points)
+            if (data.medicalInfo.preExistingConditions) {
+                medicalScore += 15;
+            }
+            
+            // Family medical history (5 points)
+            const familyHistory = data.familyInfo.familyMedicalHistory;
+            if (familyHistory && familyHistory.length > 0) {
+                medicalScore += 5;
+            }
+            
+            // Recent hospitalizations (5 points)
+            if (data.medicalInfo.hasHospitalizations === 'yes') {
+                medicalScore += 5;
+            }
+            
+            totalScore += medicalScore;
+            breakdown.medical = medicalScore;
+            
+            // 4. OCCUPATION FACTORS (15 points max)
+            let occupationScore = 0;
+            const occupation = (data.additionalInfo.occupation || '').toLowerCase();
+            const workingType = (data.additionalInfo.workingType || '').toLowerCase();
+            
+            // High-risk occupations
+            const highRiskJobs = ['driver', 'construction', 'delivery', 'miner', 'pilot', 'firefighter', 'police'];
+            if (highRiskJobs.some(job => occupation.includes(job))) {
+                occupationScore += 10;
+            }
+            
+            // High-risk working types
+            const highRiskWork = ['field job', 'driver', 'onsite job'];
+            if (highRiskWork.some(work => workingType.includes(work))) {
+                occupationScore += 5;
+            }
+            
+            totalScore += occupationScore;
+            breakdown.occupation = occupationScore;
+            
+            // 5. FINANCIAL STABILITY (15 points max)
+            let financialScore = 0;
+            
+            // Employment status
+            const employment = data.financialInfo.employmentStatus;
+            if (employment === 'unemployed') financialScore += 10;
+            else if (employment === 'freelancer') financialScore += 5;
+            else if (employment === 'student') financialScore += 3;
+            
+            // Income stability
+            const incomeStability = data.financialInfo.incomeStability;
+            if (incomeStability === 'low') financialScore += 5;
+            else if (incomeStability === 'medium') financialScore += 2;
+            
+            // Disposable income
+            const disposableIncome = data.financialInfo.disposableIncome;
+            if (disposableIncome) {
+                const disposable = parseFloat(disposableIncome);
+                if (disposable < 0) financialScore += 5;
+                else if (disposable < 5000) financialScore += 3;
+                else if (disposable < 10000) financialScore += 1;
+            }
+            
+            totalScore += financialScore;
+            breakdown.financial = financialScore;
+            
+            // Ensure total score doesn't exceed 100
+            totalScore = Math.min(totalScore, 100);
+            
+            return {
+                totalScore: totalScore,
+                breakdown: breakdown,
+                percentage: totalScore
+            };
+        }
+
+        function getRiskLevel(scoreData) {
+            const totalScore = scoreData.totalScore;
+            const breakdown = scoreData.breakdown;
+            
+            if (totalScore <= 20) {
+                return {
+                    level: 'Very Low',
+                    description: 'Excellent risk profile with minimal underwriting considerations',
+                    recommendedCover: 1500000,
+                    suggestedPremium: 250,
+                    color: '#27ae60',
+                    rating: 'A+'
+                };
+            } else if (totalScore <= 35) {
+                return {
+                    level: 'Low',
+                    description: 'Good risk profile with standard underwriting considerations',
+                    recommendedCover: 1200000,
+                    suggestedPremium: 350,
+                    color: '#2ecc71',
+                    rating: 'A'
+                };
+            } else if (totalScore <= 50) {
+                return {
+                    level: 'Moderate',
+                    description: 'Standard risk profile with moderate underwriting considerations',
+                    recommendedCover: 1000000,
+                    suggestedPremium: 500,
+                    color: '#f39c12',
+                    rating: 'B'
+                };
+            } else if (totalScore <= 70) {
+                return {
+                    level: 'High',
+                    description: 'Higher risk profile requiring detailed underwriting review',
+                    recommendedCover: 750000,
+                    suggestedPremium: 750,
+                    color: '#e67e22',
+                    rating: 'C'
+                };
+            } else {
+                return {
+                    level: 'Very High',
+                    description: 'High-risk profile requiring specialized underwriting and medical review',
+                    recommendedCover: 500000,
+                    suggestedPremium: 1200,
+                    color: '#e74c3c',
+                    rating: 'D'
+                };
+            }
+        }
+    </script>
+</body>
+</html> 

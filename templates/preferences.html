@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preferences & Risk Appetite - Underwriting Risk Assessment</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        /* Improved checkbox design */
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            margin: 8px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .checkbox-container:hover {
+            border-color: #1a365d;
+            background: #f0f4f8;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(26, 54, 93, 0.1);
+        }
+
+        .checkbox-container.selected {
+            border-color: #1a365d;
+            background: #e3f2fd;
+            box-shadow: 0 2px 8px rgba(26, 54, 93, 0.2);
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            accent-color: #1a365d;
+        }
+
+        .checkbox-container label {
+            cursor: pointer;
+            font-weight: 500;
+            color: #2d3a4a;
+            flex: 1;
+        }
+
+        .checkbox-container.selected label {
+            color: #1a365d;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Preferences & Risk Appetite</h1>
+            <p>Tell us about your insurance preferences and financial goals</p>
+        </div>
+
+        <div class="form-container">
+            <div class="success-message" id="success-message">
+                ✅ Preferences saved! Redirecting to summary page...
+            </div>
+
+            <form id="preferences-form">
+                <!-- Premium Budget Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Premium Budget Preferences</h2>
+                    
+                    <div class="form-group">
+                        <label for="premiumBudget" class="required">Preferred Monthly Premium Budget</label>
+                        <div class="currency-input">
+                            <input type="number" id="premiumBudget" name="premiumBudget" min="100" max="50000" placeholder="e.g., 500" required onchange="updateBudgetSummary()">
+                        </div>
+                        <div class="field-hint">Enter your comfortable monthly premium amount in rupees</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="budgetFlexibility" class="required">Budget Flexibility</label>
+                        <select id="budgetFlexibility" name="budgetFlexibility" required onchange="updateBudgetSummary()">
+                            <option value="">Select flexibility level</option>
+                            <option value="strict">Strict - Cannot exceed budget</option>
+                            <option value="moderate">Moderate - Can increase by 10-20%</option>
+                            <option value="flexible">Flexible - Can increase by 30-50%</option>
+                            <option value="very_flexible">Very Flexible - Can increase significantly</option>
+                        </select>
+                        <div class="field-hint">How flexible are you with your premium budget?</div>
+                    </div>
+
+                    <!-- Budget Summary -->
+                    <div class="financial-summary" id="budgetSummary">
+                        <h3 style="margin-bottom: 15px; color: #1a365d;">Budget Summary</h3>
+                        <div class="summary-item">
+                            <span class="summary-label">Monthly Budget:</span>
+                            <span class="summary-value" id="summaryBudget">Rs.0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Flexible Range:</span>
+                            <span class="summary-value" id="summaryRange">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Annual Budget:</span>
+                            <span class="summary-value" id="summaryAnnual">Rs.0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Insurance Type Interest Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Insurance Type Preferences</h2>
+                    
+                    <div class="form-group">
+                        <label class="required">Which insurance types interest you?</label>
+                        <div class="medical-history-grid">
+                            <div class="checkbox-container" onclick="toggleCheckbox('term_insurance')">
+                                <input type="checkbox" id="term_insurance" name="insuranceTypes" value="term_insurance" onchange="updateInsuranceSummary()">
+                                <label for="term_insurance">Term Life Insurance</label>
+                            </div>
+                            <div class="checkbox-container" onclick="toggleCheckbox('health_insurance')">
+                                <input type="checkbox" id="health_insurance" name="insuranceTypes" value="health_insurance" onchange="updateInsuranceSummary()">
+                                <label for="health_insurance">Health Insurance</label>
+                            </div>
+                            <div class="checkbox-container" onclick="toggleCheckbox('critical_illness')">
+                                <input type="checkbox" id="critical_illness" name="insuranceTypes" value="critical_illness" onchange="updateInsuranceSummary()">
+                                <label for="critical_illness">Critical Illness</label>
+                            </div>
+                            <div class="checkbox-container" onclick="toggleCheckbox('accident_insurance')">
+                                <input type="checkbox" id="accident_insurance" name="insuranceTypes" value="accident_insurance" onchange="updateInsuranceSummary()">
+                                <label for="accident_insurance">Accident Insurance</label>
+                            </div>
+                            <div class="checkbox-container" onclick="toggleCheckbox('ulip')">
+                                <input type="checkbox" id="ulip" name="insuranceTypes" value="ulip" onchange="updateInsuranceSummary()">
+                                <label for="ulip">ULIP (Unit Linked Insurance Plan)</label>
+                            </div>
+                            <div class="checkbox-container" onclick="toggleCheckbox('endowment')">
+                                <input type="checkbox" id="endowment" name="insuranceTypes" value="endowment" onchange="updateInsuranceSummary()">
+                                <label for="endowment">Endowment Plans</label>
+                            </div>
+                            <div class="checkbox-container" onclick="toggleCheckbox('pension')">
+                                <input type="checkbox" id="pension" name="insuranceTypes" value="pension" onchange="updateInsuranceSummary()">
+                                <label for="pension">Pension/Annuity Plans</label>
+                            </div>
+                            <div class="checkbox-container" onclick="toggleCheckbox('motor_insurance')">
+                                <input type="checkbox" id="motor_insurance" name="insuranceTypes" value="motor_insurance" onchange="updateInsuranceSummary()">
+                                <label for="motor_insurance">Motor Insurance</label>
+                            </div>
+                        </div>
+                        <div class="field-hint">Select all insurance types that interest you</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="primaryInterest" class="required">Primary Insurance Interest</label>
+                        <select id="primaryInterest" name="primaryInterest" required>
+                            <option value="">Select primary interest</option>
+                            <option value="term_insurance">Term Life Insurance</option>
+                            <option value="health_insurance">Health Insurance</option>
+                            <option value="critical_illness">Critical Illness</option>
+                            <option value="accident_insurance">Accident Insurance</option>
+                            <option value="ulip">ULIP</option>
+                            <option value="endowment">Endowment Plans</option>
+                            <option value="pension">Pension/Annuity Plans</option>
+                            <option value="motor_insurance">Motor Insurance</option>
+                        </select>
+                        <div class="field-hint">Which insurance type is your top priority?</div>
+                    </div>
+                </div>
+
+                <!-- Riders & Add-ons Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Riders & Add-ons Preferences</h2>
+                    
+                    <div class="form-group">
+                        <label class="required">Are you willing to buy riders/add-ons?</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="riders-yes" name="willingToBuyRiders" value="yes" required onchange="toggleRiders()">
+                                <label for="riders-yes">Yes</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="riders-no" name="willingToBuyRiders" value="no" onchange="toggleRiders()">
+                                <label for="riders-no">No</label>
+                            </div>
+                        </div>
+                        <div class="field-hint">Riders provide additional coverage (e.g., Personal Accident, Critical Illness)</div>
+                    </div>
+
+                    <div id="ridersDetails" style="display: none;">
+                        <div class="form-group">
+                            <label>Which riders interest you?</label>
+                            <div class="medical-history-grid">
+                                <div class="checkbox-container" onclick="toggleCheckbox('pa_rider')">
+                                    <input type="checkbox" id="pa_rider" name="interestedRiders" value="personal_accident">
+                                    <label for="pa_rider">Personal Accident Rider</label>
+                                </div>
+                                <div class="checkbox-container" onclick="toggleCheckbox('ci_rider')">
+                                    <input type="checkbox" id="ci_rider" name="interestedRiders" value="critical_illness">
+                                    <label for="ci_rider">Critical Illness Rider</label>
+                                </div>
+                                <div class="checkbox-container" onclick="toggleCheckbox('waiver_rider')">
+                                    <input type="checkbox" id="waiver_rider" name="interestedRiders" value="premium_waiver">
+                                    <label for="waiver_rider">Premium Waiver Rider</label>
+                                </div>
+                                <div class="checkbox-container" onclick="toggleCheckbox('hospital_rider')">
+                                    <input type="checkbox" id="hospital_rider" name="interestedRiders" value="hospital_cash">
+                                    <label for="hospital_rider">Hospital Cash Rider</label>
+                                </div>
+                                <div class="checkbox-container" onclick="toggleCheckbox('surgical_rider')">
+                                    <input type="checkbox" id="surgical_rider" name="interestedRiders" value="surgical_care">
+                                    <label for="surgical_rider">Surgical Care Rider</label>
+                                </div>
+                                <div class="checkbox-container" onclick="toggleCheckbox('disability_rider')">
+                                    <input type="checkbox" id="disability_rider" name="interestedRiders" value="disability">
+                                    <label for="disability_rider">Disability Rider</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Deductible Flexibility Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Deductible & Coverage Preferences</h2>
+                    
+                    <div class="form-group">
+                        <label class="required">Are you flexible with deductibles?</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="deductible-yes" name="flexibleDeductibles" value="yes" required>
+                                <label for="deductible-yes">Yes - I can accept higher deductibles for lower premiums</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="deductible-no" name="flexibleDeductibles" value="no">
+                                <label for="deductible-no">No - I prefer lower deductibles even if it means higher premiums</label>
+                            </div>
+                        </div>
+                        <div class="field-hint">Higher deductibles typically mean lower premiums but higher out-of-pocket costs</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="coveragePriority" class="required">Coverage Priority</label>
+                        <select id="coveragePriority" name="coveragePriority" required>
+                            <option value="">Select priority</option>
+                            <option value="maximum_coverage">Maximum Coverage - Higher sum insured</option>
+                            <option value="balanced">Balanced - Moderate coverage and premium</option>
+                            <option value="minimum_premium">Minimum Premium - Basic coverage</option>
+                        </select>
+                        <div class="field-hint">What's more important to you - coverage amount or premium cost?</div>
+                    </div>
+                </div>
+
+                <!-- Investment Goals Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Long-term Investment Goals</h2>
+                    
+                    <div class="form-group">
+                        <label class="required">What are your primary investment goals?</label>
+                        <div class="medical-history-grid">
+                            <div class="checkbox-container" onclick="toggleCheckbox('retirement')">
+                                <input type="checkbox" id="retirement" name="investmentGoals" value="retirement" onchange="updateGoalsSummary()">
+                                <label for="retirement">Retirement Planning</label>
+                            </div>
+                            <div class="checkbox-container" onclick="toggleCheckbox('family_security')">
+                                <input type="checkbox" id="family_security" name="investmentGoals" value="family_security" onchange="updateGoalsSummary()">
+                                <label for="family_security">Family Security</label>
+                            </div>
+                            <div class="checkbox-container" onclick="toggleCheckbox('child_education')">
+                                <input type="checkbox" id="child_education" name="investmentGoals" value="child_education" onchange="updateGoalsSummary()">
+                                <label for="child_education">Child Education</label>
+                            </div>
+                            <div class="checkbox-container" onclick="toggleCheckbox('wealth_creation')">
+                                <input type="checkbox" id="wealth_creation" name="investmentGoals" value="wealth_creation" onchange="updateGoalsSummary()">
+                                <label for="wealth_creation">Wealth Creation</label>
+                            </div>
+                            <div class="checkbox-container" onclick="toggleCheckbox('tax_saving')">
+                                <input type="checkbox" id="tax_saving" name="investmentGoals" value="tax_saving" onchange="updateGoalsSummary()">
+                                <label for="tax_saving">Tax Saving</label>
+                            </div>
+                            <div class="checkbox-container" onclick="toggleCheckbox('emergency_fund')">
+                                <input type="checkbox" id="emergency_fund" name="investmentGoals" value="emergency_fund" onchange="updateGoalsSummary()">
+                                <label for="emergency_fund">Emergency Fund</label>
+                            </div>
+                        </div>
+                        <div class="field-hint">Select all goals that apply to you</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="investmentHorizon" class="required">Investment Time Horizon</label>
+                        <select id="investmentHorizon" name="investmentHorizon" required>
+                            <option value="">Select time horizon</option>
+                            <option value="short_term">Short-term (1-3 years)</option>
+                            <option value="medium_term">Medium-term (3-10 years)</option>
+                            <option value="long_term">Long-term (10+ years)</option>
+                        </select>
+                        <div class="field-hint">How long do you plan to invest?</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="riskTolerance" class="required">Risk Tolerance Level</label>
+                        <select id="riskTolerance" name="riskTolerance" required>
+                            <option value="">Select risk tolerance</option>
+                            <option value="conservative">Conservative - Low risk, stable returns</option>
+                            <option value="moderate">Moderate - Balanced risk and returns</option>
+                            <option value="aggressive">Aggressive - High risk, high potential returns</option>
+                        </select>
+                        <div class="field-hint">How comfortable are you with investment risks?</div>
+                    </div>
+                </div>
+
+                <!-- Preferences Summary -->
+                <div class="coverage-summary" id="preferencesSummary">
+                    <h3 style="margin-bottom: 15px; color: #1a365d;">Preferences Summary</h3>
+                    <div class="summary-item">
+                        <span class="summary-label">Monthly Budget:</span>
+                        <span class="summary-value" id="summaryPrefBudget">Rs.0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Insurance Types:</span>
+                        <span class="summary-value" id="summaryInsuranceTypes">None selected</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Riders Interest:</span>
+                        <span class="summary-value" id="summaryRiders">No</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Investment Goals:</span>
+                        <span class="summary-value" id="summaryGoals">None selected</span>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" onclick="goBack()">Back</button>
+                    <button type="submit" class="btn btn-primary">Submit & Continue</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Navigation
+        function goBack() {
+            window.location.href = '/medical';
+        }
+
+        // Toggle checkbox with improved design
+        function toggleCheckbox(checkboxId) {
+            const checkbox = document.getElementById(checkboxId);
+            const container = checkbox.closest('.checkbox-container');
+            
+            // Toggle the checkbox
+            checkbox.checked = !checkbox.checked;
+            
+            // Update visual state
+            if (checkbox.checked) {
+                container.classList.add('selected');
+            } else {
+                container.classList.remove('selected');
+            }
+            
+            // Trigger the original onchange event
+            const event = new Event('change');
+            checkbox.dispatchEvent(event);
+        }
+
+        // Toggle riders section
+        function toggleRiders() {
+            const willingToBuyRiders = document.querySelector('input[name="willingToBuyRiders"]:checked').value;
+            const ridersDetails = document.getElementById('ridersDetails');
+            
+            if (willingToBuyRiders === 'yes') {
+                ridersDetails.style.display = 'block';
+            } else {
+                ridersDetails.style.display = 'none';
+            }
+            updatePreferencesSummary();
+        }
+
+        // Update budget summary
+        function updateBudgetSummary() {
+            const budget = parseFloat(document.getElementById('premiumBudget').value) || 0;
+            const flexibility = document.getElementById('budgetFlexibility').value;
+            
+            document.getElementById('summaryBudget').textContent = `Rs.${budget.toLocaleString()}`;
+            document.getElementById('summaryAnnual').textContent = `Rs.${(budget * 12).toLocaleString()}`;
+            
+            let range = '-';
+            if (flexibility === 'strict') {
+                range = `Rs.${budget.toLocaleString()} (Fixed)`;
+            } else if (flexibility === 'moderate') {
+                const max = budget * 1.2;
+                range = `Rs.${budget.toLocaleString()} - Rs.${max.toLocaleString()}`;
+            } else if (flexibility === 'flexible') {
+                const max = budget * 1.5;
+                range = `Rs.${budget.toLocaleString()} - Rs.${max.toLocaleString()}`;
+            } else if (flexibility === 'very_flexible') {
+                const max = budget * 2;
+                range = `Rs.${budget.toLocaleString()} - Rs.${max.toLocaleString()}`;
+            }
+            
+            document.getElementById('summaryRange').textContent = range;
+        }
+
+        // Update insurance summary
+        function updateInsuranceSummary() {
+            const selectedTypes = document.querySelectorAll('input[name="insuranceTypes"]:checked');
+            const types = Array.from(selectedTypes).map(cb => cb.value);
+            
+            if (types.length === 0) {
+                document.getElementById('summaryInsuranceTypes').textContent = 'None selected';
+            } else if (types.length <= 3) {
+                document.getElementById('summaryInsuranceTypes').textContent = types.join(', ');
+            } else {
+                document.getElementById('summaryInsuranceTypes').textContent = `${types.length} types selected`;
+            }
+        }
+
+        // Update goals summary
+        function updateGoalsSummary() {
+            const selectedGoals = document.querySelectorAll('input[name="investmentGoals"]:checked');
+            const goals = Array.from(selectedGoals).map(cb => cb.value);
+            
+            if (goals.length === 0) {
+                document.getElementById('summaryGoals').textContent = 'None selected';
+            } else if (goals.length <= 2) {
+                document.getElementById('summaryGoals').textContent = goals.join(', ');
+            } else {
+                document.getElementById('summaryGoals').textContent = `${goals.length} goals selected`;
+            }
+        }
+
+        // Update preferences summary
+        function updatePreferencesSummary() {
+            // Budget
+            const budget = parseFloat(document.getElementById('premiumBudget').value) || 0;
+            document.getElementById('summaryPrefBudget').textContent = `Rs.${budget.toLocaleString()}`;
+            
+            // Insurance types
+            updateInsuranceSummary();
+            
+            // Riders
+            const willingToBuyRiders = document.querySelector('input[name="willingToBuyRiders"]:checked');
+            if (willingToBuyRiders && willingToBuyRiders.value === 'yes') {
+                const selectedRiders = document.querySelectorAll('input[name="interestedRiders"]:checked');
+                if (selectedRiders.length > 0) {
+                    document.getElementById('summaryRiders').textContent = `${selectedRiders.length} rider(s)`;
+                } else {
+                    document.getElementById('summaryRiders').textContent = 'Yes (not specified)';
+                }
+            } else {
+                document.getElementById('summaryRiders').textContent = 'No';
+            }
+            
+            // Goals
+            updateGoalsSummary();
+        }
+
+        // Load saved data
+        function loadSavedData() {
+            const savedData = localStorage.getItem('preferencesInfo');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                
+                // Populate form fields
+                Object.keys(data).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        if (element.type === 'radio') {
+                            const radioElement = document.querySelector(`input[name="${key}"][value="${data[key]}"]`);
+                            if (radioElement) {
+                                radioElement.checked = true;
+                                if (key === 'willingToBuyRiders') {
+                                    toggleRiders();
+                                }
+                            }
+                        } else if (element.type === 'checkbox') {
+                            // Handle checkboxes for insurance types and goals
+                            if (data.selectedInsuranceTypes && data.selectedInsuranceTypes.includes(data[key])) {
+                                element.checked = true;
+                            }
+                            if (data.selectedGoals && data.selectedGoals.includes(data[key])) {
+                                element.checked = true;
+                            }
+                        } else {
+                            element.value = data[key];
+                        }
+                    }
+                });
+                
+                updatePreferencesSummary();
+            }
+        }
+
+        // Form submission
+        const form = document.getElementById('preferences-form');
+        const successMessage = document.getElementById('success-message');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Collect form data
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+            
+            // Handle checkbox arrays
+            const insuranceTypes = formData.getAll('insuranceTypes');
+            const interestedRiders = formData.getAll('interestedRiders');
+            const investmentGoals = formData.getAll('investmentGoals');
+            
+            data.selectedInsuranceTypes = insuranceTypes;
+            data.selectedRiders = interestedRiders;
+            data.selectedGoals = investmentGoals;
+            
+            // Store in localStorage
+            localStorage.setItem('preferencesInfo', JSON.stringify(data));
+            
+            // Save to server
+            fetch('/api/save_preferences', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    // Show success and redirect
+                    successMessage.style.display = 'block';
+                    setTimeout(() => {
+                        window.location.href = '/summary';
+                    }, 2000);
+                } else {
+                    alert('Error saving data: ' + result.error);
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('Error saving data. Please try again.');
+            });
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSavedData();
+        });
+    </script>
+</body>
+</html> 
