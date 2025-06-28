@@ -17,7 +17,7 @@ import logging
 import google.generativeai as genai
 
 # Set API key
-os.environ["GEMINI_API_KEY"] = "AIzaSyDWGcViCdqOIAr0dCNYvjbL_3brTT6SEEwAAAAAAAAAAAAAA"
+os.environ["GEMINI_API_KEY"] = "AIzaSyDWGcViCdqOIAr0dCNYvjbL_3brTT6SEEw"
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
