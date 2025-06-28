@@ -16,7 +16,7 @@ from google import genai
 from google.genai import types
 
 
-os.environ["GEMINI_API_KEY"] = "AIzaSyDIQVQ4a-n_cUxrUXJ5KAAng4diA9SL8Xkasdfghkckmlkm"
+os.environ["GEMINI_API_KEY"] = "Your_API_KEY"
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
